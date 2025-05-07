@@ -222,29 +222,6 @@
             font-weight: 700;
             color: #fe0096;
         }
-        .qa-indicator {
-            position: absolute;
-            bottom: 20px;
-            right: 30px;
-            background: rgba(254, 0, 150, 0.2);
-            border-radius: 50px;
-            padding: 10px 20px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-family: 'Poppins', sans-serif;
-            font-weight: 700;
-            font-size: 16px;
-            color: white;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
-            z-index: 5;
-            border: 1px solid rgba(254, 0, 150, 0.3);
-            animation: pulse 2s infinite;
-        }
-        .qa-icon {
-            color: #fe0096;
-            font-size: 18px;
-        }
         .background-grid {
             position: absolute;
             top: 0;
@@ -375,6 +352,74 @@
         #nextButton {
             right: 30px;
         }
+
+        #restartButton {
+            display: block; 
+            margin-top: 40px; 
+            margin-bottom: 40px; 
+            padding: 18px 40px; 
+            font-family: 'Orbitron', sans-serif; 
+            font-size: 22px; 
+            font-weight: 900; 
+            color: white;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 1.5px; 
+            background: linear-gradient(135deg, #e01483 0%, #a80057 100%); 
+            border: 3px solid #fe0096; 
+            border-radius: 8px; 
+            box-shadow: 0 0 10px #fe0096, 0 0 20px #fe0096, 0 0 30px #fe0096,
+                        inset 0 0 8px rgba(255, 100, 200, 0.5), 
+                        0 5px 15px rgba(0,0,0,0.4); 
+            text-shadow: 0 0 3px #fff, 0 0 6px #fe0096; 
+            cursor: pointer;
+            transition: all 0.2s ease-in-out;
+            outline: none;
+            width: auto; 
+            align-self: center; 
+            animation: gamifiedIdleGlow 2.5s infinite ease-in-out; 
+            position: relative;
+            z-index: 100;
+            pointer-events: auto;
+        }
+
+        #restartButton:hover,
+        #restartButton:focus {
+            background: linear-gradient(135deg, #ff37ab 0%, #c90068 100%); 
+            border-color: #ff5bcd; 
+            box-shadow: 0 0 15px #ff37ab, 0 0 25px #ff37ab, 0 0 40px #ff37ab,
+                        inset 0 0 10px rgba(255, 150, 220, 0.7),
+                        0 8px 20px rgba(0,0,0,0.5);
+            transform: translateY(-3px) scale(1.03); 
+            text-shadow: 0 0 4px #fff, 0 0 8px #ff37ab;
+        }
+
+        #restartButton:active {
+            background: linear-gradient(135deg, #a80057 0%, #e01483 100%); /* Inverted or darker gradient */
+            transform: translateY(2px) scale(0.98); /* More noticeable press */
+            box-shadow: 0 0 5px #c90068, 0 0 10px #c90068, /* Reduced glow */
+                        inset 0 0 12px rgba(120, 0, 70, 0.8); /* Deeper inset shadow */
+            text-shadow: 0 0 2px #f0a0d0; /* Slightly muted text shadow */
+            transition-duration: 0.05s; /* Make active transition faster */
+        }
+
+        /* Added keyframes for idle animation */
+        @keyframes gamifiedIdleGlow {
+            0%, 100% {
+                box-shadow: 0 0 10px #fe0096, 0 0 20px #fe0096, 0 0 30px #fe0096,
+                            inset 0 0 8px rgba(255, 100, 200, 0.5), 
+                            0 5px 15px rgba(0,0,0,0.4);
+                text-shadow: 0 0 3px #fff, 0 0 6px #fe0096;
+                transform: scale(1); /* Base scale */
+            }
+            50% {
+                box-shadow: 0 0 12px #ff37ab, 0 0 25px #ff37ab, 0 0 38px #ff37ab, /* Slightly more intense glow */
+                            inset 0 0 10px rgba(255, 150, 220, 0.6), 
+                            0 6px 18px rgba(0,0,0,0.45); 
+                text-shadow: 0 0 4px #fff, 0 0 8px #ff37ab;
+                transform: scale(1.015); /* Subtle pulse scale */
+            }
+        }
     </style>
 </head>
 <body>
@@ -455,11 +500,8 @@
             </div>
         </div>
         
-        <!-- Q&A indicator -->
-        <div class="qa-indicator">
-            <i class="fas fa-question-circle qa-icon"></i>
-            <span>Preguntas & Respuestas</span>
-        </div>
+        <button id="restartButton" onclick="goToStart()">Restart</button>
+        
     </div>
     
     <script>
@@ -499,5 +541,10 @@
     </div>
 
     <script src="navigation.js" defer></script>
+    <script>
+        function goToStart() {
+            window.location.href = "index.html";
+        }
+    </script>
 </body>
 </html>
