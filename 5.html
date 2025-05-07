@@ -1,0 +1,363 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panorama de herramientas</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 50px;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-bottom: 60px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .tools-container {
+            width: 100%;
+            max-width: 900px;
+            position: relative;
+            z-index: 5;
+            perspective: 1000px;
+        }
+        .tools-table {
+            width: 100%;
+            transform-style: preserve-3d;
+            transform: rotateX(5deg);
+            animation: float 6s ease-in-out infinite;
+        }
+        .tool-category {
+            height: 80px;
+            margin-bottom: 20px;
+            display: flex;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border-left: 4px solid rgba(43, 203, 251, 0.5);
+        }
+        .tool-category:hover {
+            transform: translateZ(20px);
+            box-shadow: 0 15px 30px rgba(254, 0, 150, 0.2);
+            border-left-color: #fe0096;
+        }
+        .category-icon {
+            flex: 0 0 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 36px;
+            background: rgba(8, 30, 51, 0.8);
+        }
+        .category-name {
+            flex: 0 0 220px;
+            display: flex;
+            align-items: center;
+            padding-left: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: white;
+            border-right: 1px solid rgba(43, 203, 251, 0.3);
+        }
+        .category-tools {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            padding-left: 25px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+        }
+        .tool-name {
+            margin-right: 15px;
+            position: relative;
+            padding: 5px 10px;
+            transition: all 0.3s ease;
+            border-radius: 5px;
+        }
+        .tool-name:hover {
+            background: rgba(254, 0, 150, 0.1);
+            color: #fe0096;
+        }
+        .star {
+            position: relative;
+            display: inline-block;
+            margin-left: 8px;
+            font-size: 18px;
+            vertical-align: middle;
+            color: #fe0096;
+            animation: pulse 2s infinite;
+        }
+        .transition-note {
+            margin-top: 40px;
+            font-family: 'Poppins', sans-serif;
+            font-style: italic;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            background: rgba(43, 203, 251, 0.1);
+            padding: 15px 25px;
+            border-radius: 10px;
+            max-width: 700px;
+            position: relative;
+            z-index: 5;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        .cursor-highlight {
+            position: relative;
+        }
+        .cursor-highlight::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            left: 0;
+            top: 0;
+            background-color: rgba(254, 0, 150, 0.2);
+            border-radius: 5px;
+            z-index: -1;
+            animation: glow 2s infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: rotateX(5deg); }
+            50% { transform: rotateX(8deg); }
+        }
+        @keyframes pulse {
+            0% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.5); opacity: 0.7; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        @keyframes glow {
+            0%, 100% { box-shadow: 0 0 5px #fe0096; }
+            50% { box-shadow: 0 0 20px #fe0096; }
+        }
+        .utility-belt {
+            position: absolute;
+            bottom: 30px;
+            width: 240px;
+            height: 60px;
+            background: linear-gradient(90deg, #0a2d42, #031e31);
+            border-radius: 30px;
+            display: flex;
+            justify-content: space-around;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            z-index: 6;
+        }
+        .utility-item {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: rgba(254, 0, 150, 0.2);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fe0096;
+            font-size: 18px;
+            box-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px;
+        }
+
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">Tu nuevo cinturón de utilidades 🛠️</h1>
+        
+        <!-- Tools categories table -->
+        <div class="tools-container">
+            <div class="tools-table">
+                <!-- Category 1: Text -->
+                <div class="tool-category" id="category-text">
+                    <div class="category-icon">✍️</div>
+                    <div class="category-name">Texto</div>
+                    <div class="category-tools">
+                        <span class="tool-name">ChatGPT</span>
+                        <span class="tool-name">Claude</span>
+                        <span class="tool-name">Gemini</span>
+                    </div>
+                </div>
+                
+                <!-- Category 2: Visual -->
+                <div class="tool-category" id="category-visual">
+                    <div class="category-icon">🎨</div>
+                    <div class="category-name">Visual</div>
+                    <div class="category-tools">
+                        <span class="tool-name">DALL·E 3</span>
+                        <span class="tool-name">Midjourney</span>
+                        <span class="tool-name">Leonardo</span>
+                    </div>
+                </div>
+                
+                <!-- Category 3: Automation -->
+                <div class="tool-category" id="category-automation">
+                    <div class="category-icon">📋</div>
+                    <div class="category-name">Automatización</div>
+                    <div class="category-tools">
+                        <span class="tool-name">Make</span>
+                        <span class="tool-name">Zapier</span>
+                        <span class="tool-name">n8n</span>
+
+                    </div>
+                </div>
+                
+                <!-- Category 4: Audio+Video -->
+                <div class="tool-category" id="category-media">
+                    <div class="category-icon">🎥</div>
+                    <div class="category-name">Audio+Video</div>
+                    <div class="category-tools">
+                        <span class="tool-name">Suno</span>
+                        <span class="tool-name">ElevenLabs</span>
+                        <span class="tool-name">Descript</span>
+                    </div>
+                </div>
+                
+                <!-- Category 5: Code (with star effect) -->
+                <div class="tool-category" id="category-code">
+                    <div class="category-icon">💻</div>
+                    <div class="category-name">Código</div>
+                    <div class="category-tools">
+                        <span class="tool-name cursor-highlight">Cursor.dev<span class="star">★</span></span>
+                        <span class="tool-name">Windsurf</span>
+                        <span class="tool-name">v0</span>
+                        <span class="tool-name">Firebase Studio</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Transition note -->
+        <div class="transition-note">
+            <i class="fas fa-arrow-right" style="margin-right: 10px; color: #2bcbfb;"></i>
+            Cada categoría se ampliará en las siguientes diapositivas con mini-demos
+        </div>
+        
+        <!-- Decorative utility belt -->
+
+    </div>
+    
+    <script>
+        // Enhanced 3D effect on hover
+        document.querySelectorAll('.tool-category').forEach((category, index) => {
+            category.addEventListener('mouseover', function() {
+                this.style.transform = `translateZ(30px) rotateX(${5 - index}deg)`;
+            });
+            
+            category.addEventListener('mouseout', function() {
+                this.style.transform = 'translateZ(0) rotateX(0)';
+            });
+        });
+    </script>
+
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+</body>
+</html>

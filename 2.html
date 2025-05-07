@@ -1,0 +1,276 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Agenda - IA en el trabajo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: auto;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            padding-top: 50px;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .card-container {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            margin-top: 20px;
+            position: relative;
+            z-index: 5;
+        }
+        .card {
+            width: 250px;
+            height: 280px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 15px;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+            border: 1px solid rgba(43, 203, 251, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-15px);
+            box-shadow: 0 15px 30px rgba(254, 0, 150, 0.2);
+            border: 1px solid rgba(254, 0, 150, 0.8);
+        }
+        .card:hover .emoji {
+            animation: bounce 0.6s ease infinite alternate;
+        }
+        .card:hover .card-glow {
+            opacity: 0.8;
+        }
+        .card:nth-child(1):hover {
+            border-color: rgba(254, 0, 150, 0.8);
+        }
+        .card:nth-child(2):hover {
+            border-color: rgba(43, 203, 251, 0.8);
+        }
+        .card:nth-child(3):hover {
+            border-color: rgba(254, 0, 150, 0.8);
+        }
+        .card:nth-child(4):hover {
+            border-color: rgba(43, 203, 251, 0.8);
+        }
+        .emoji {
+            font-size: 80px;
+            margin-bottom: 20px;
+            z-index: 2;
+            transition: all 0.3s ease;
+            transform-origin: center bottom;
+        }
+        .card-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 500;
+            font-size: 20px;
+            text-align: center;
+            color: white;
+            z-index: 2;
+        }
+        .card-glow {
+            position: absolute;
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            filter: blur(40px);
+            opacity: 0.2;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+        }
+        .glow-1 {
+            background-color: #fe0096;
+        }
+        .glow-2 {
+            background-color: #2bcbfb;
+        }
+        @keyframes bounce {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-15px); }
+        }
+        .narrative {
+            font-family: 'Poppins', sans-serif;
+            font-style: italic;
+            font-size: 22px;
+            color: rgba(255, 255, 255, 0.85);
+            max-width: 800px;
+            text-align: center;
+            margin-top: 50px;
+            position: relative;
+            z-index: 5;
+            line-height: 1.5;
+        }
+
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        .highlight {
+            color: #fe0096;
+            font-weight: 700;
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000; /* Ensure buttons are on top */
+            background-color: transparent; /* Minimalist background */
+            color: rgba(255, 255, 255, 0.7); /* Arrow color */
+            border: none; /* No border for minimalist look */
+            padding: 10px;
+            font-family: 'Courier New', monospace; /* Pixel-art feel font */
+            font-size: 48px; /* Larger arrow */
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096; /* Hover effect - pink */
+            transform: translateY(-50%) scale(1.1); /* Slightly larger on hover */
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px; /* Position on the left */
+        }
+
+        #nextButton {
+            right: 30px; /* Position on the right */
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main content -->
+        <h1 class="title">Lo que vas a descubrir hoy</h1>
+        
+        <div class="card-container">
+            <!-- Card 1 -->
+            <div class="card" id="card1">
+                <div class="card-glow glow-1"></div>
+                <div class="emoji">🤖</div>
+                <div class="card-text">¿Qué es la IA?</div>
+            </div>
+            
+            <!-- Card 2 -->
+            <div class="card" id="card2">
+                <div class="card-glow glow-2"></div>
+                <div class="emoji">💼</div>
+                <div class="card-text">¿Cómo puede ayudarte?</div>
+            </div>
+            
+            <!-- Card 3 -->
+            <div class="card" id="card3">
+                <div class="card-glow glow-1"></div>
+                <div class="emoji">🛠️</div>
+                <div class="card-text">Herramientas + mini-casos reales</div>
+            </div>
+            
+            <!-- Card 4 -->
+            <div class="card" id="card4">
+                <div class="card-glow glow-2"></div>
+                <div class="emoji">🎬</div>
+                <div class="card-text">Demo en vivo + tips <span class="highlight">🔥</span></div>
+            </div>
+        </div>
+        
+        <div class="narrative">
+            "Imagina un asistente que no duerme, no cobra horas extra y jamás se queja..."
+        </div>
+
+    </div>
+    
+    <script>
+        // Add interactive effects
+        document.querySelectorAll('.card').forEach(card => {
+            card.addEventListener('mouseover', function() {
+                // Slightly different animation for each card
+                const randomDelay = Math.random() * 0.2;
+                this.querySelector('.emoji').style.animationDelay = `${randomDelay}s`;
+            });
+        });
+    </script>
+
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+</body>
+</html>

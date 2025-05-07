@@ -1,0 +1,572 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Diseño & Visuales</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .demo-container {
+            display: flex;
+            width: 90%;
+            max-width: 1100px;
+            height: 450px;
+            position: relative;
+            z-index: 5;
+        }
+        .prompt-side {
+            flex: 0 0 45%;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 20px 0 0 20px;
+            padding: 30px;
+            display: flex;
+            flex-direction: column;
+            border-right: 1px solid rgba(43, 203, 251, 0.3);
+            position: relative;
+            overflow: hidden;
+        }
+        .result-side {
+            flex: 0 0 55%;
+            background: rgba(8, 40, 61, 0.5);
+            border-radius: 0 20px 20px 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+        .prompt-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        .prompt-icon {
+            font-size: 26px;
+            color: #fe0096;
+            margin-right: 15px;
+        }
+        .prompt-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: white;
+        }
+        .prompt-field {
+            flex-grow: 1;
+            background: rgba(3, 30, 49, 0.8);
+            border: 2px solid rgba(43, 203, 251, 0.4);
+            border-radius: 15px;
+            padding: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            color: white;
+            min-height: 150px;
+            position: relative;
+            resize: none;
+            margin-bottom: 20px;
+            overflow-y: auto;
+        }
+        .prompt-field:focus {
+            outline: none;
+            border-color: #fe0096;
+        }
+        .prompt-cursor {
+            display: inline-block;
+            width: 2px;
+            height: 24px;
+            background-color: #fe0096;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        .prompt-suggestions {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 20px;
+        }
+        .suggestion-tag {
+            background: rgba(254, 0, 150, 0.1);
+            border: 1px solid rgba(254, 0, 150, 0.4);
+            border-radius: 20px;
+            padding: 8px 16px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .suggestion-tag:hover {
+            background: rgba(254, 0, 150, 0.3);
+            transform: translateY(-3px);
+        }
+        .generate-button {
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 18px;
+            color: white;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 200px;
+            margin: 20px auto 0;
+            box-shadow: 0 5px 15px rgba(254, 0, 150, 0.3);
+        }
+        .generate-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(254, 0, 150, 0.5);
+        }
+        .generate-icon {
+            margin-right: 10px;
+            font-size: 20px;
+        }
+        .loading-indicator {
+            width: 50px;
+            height: 50px;
+            border: 5px solid rgba(43, 203, 251, 0.2);
+            border-top: 5px solid #2bcbfb;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+        }
+        .image-result {
+            width: 90%;
+            height: 90%;
+            background: #081828;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+            border: 1px solid rgba(43, 203, 251, 0.3);
+        }
+        .placeholder-image {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, #081828, #031e31);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: rgba(255, 255, 255, 0.2);
+            font-size: 100px;
+        }
+        .result-image {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 1s ease;
+        }
+        .image-overlay {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(8, 40, 61, 0.8);
+            border-radius: 10px;
+            padding: 8px 12px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        .overlay-icon {
+            margin-right: 8px;
+            font-size: 16px;
+            color: #2bcbfb;
+        }
+        .gemini-note {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80%;
+            max-width: 900px;
+            background: rgba(254, 0, 150, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 4px solid #fe0096;
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: white;
+            text-align: left;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        .note-highlight {
+            color: #2bcbfb;
+            font-weight: 700;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        @keyframes spin {
+            0% { transform: translate(-50%, -50%) rotate(0deg); }
+            100% { transform: translate(-50%, -50%) rotate(360deg); }
+        }
+        .img-dog {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .dog-placeholder {
+            position: relative;
+            width: 90%;
+            height: 90%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: linear-gradient(135deg, #031e31, #062f4a);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+        .dog-head {
+            width: 120px;
+            height: 120px;
+            background: #4a3628;
+            border-radius: 50%;
+            position: relative;
+            margin-bottom: 10px;
+        }
+        .dog-ear {
+            width: 40px;
+            height: 70px;
+            background: #4a3628;
+            border-radius: 50%;
+            position: absolute;
+        }
+        .dog-ear-left {
+            top: -20px;
+            left: 10px;
+            transform: rotate(-30deg);
+        }
+        .dog-ear-right {
+            top: -20px;
+            right: 10px;
+            transform: rotate(30deg);
+        }
+        .dog-eye {
+            width: 15px;
+            height: 15px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            top: 40px;
+        }
+        .dog-eye-left {
+            left: 30px;
+        }
+        .dog-eye-right {
+            right: 30px;
+        }
+        .dog-nose {
+            width: 25px;
+            height: 15px;
+            background: black;
+            border-radius: 50%;
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+        }
+        .dog-body {
+            width: 150px;
+            height: 100px;
+            background: #4a3628;
+            border-radius: 50px;
+            position: relative;
+        }
+        .crown {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 40px;
+            background: #f4d03f;
+            border-radius: 10px 10px 0 0;
+            display: flex;
+            justify-content: space-around;
+            padding-top: 5px;
+        }
+        .crown-point {
+            width: 15px;
+            height: 20px;
+            background: #f4d03f;
+            border-radius: 50% 50% 0 0;
+        }
+        .neon-tag {
+            position: absolute;
+            bottom: 30px;
+            right: 40px;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 16px;
+            color: #0ff;
+            text-shadow: 0 0 10px #0ff, 0 0 20px #0ff;
+            transform: rotate(-10deg);
+        }
+        .tie {
+            position: absolute;
+            top: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 30px;
+            height: 40px;
+            background: #e74c3c;
+        }
+        .medieval-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            opacity: 0.1;
+            z-index: -1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .stone-wall {
+            width: 80%;
+            height: 80%;
+            background-image: linear-gradient(#555, #333 50%, #555 50%, #333);
+            background-size: 40px 40px;
+            opacity: 0.3;
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px;
+        }
+
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">Del texto al lienzo en 15 s</h1>
+        
+        <!-- Demo container -->
+        <div class="demo-container">
+            <!-- Left side - Prompt -->
+            <div class="prompt-side">
+                <div class="prompt-header">
+                    <i class="fas fa-keyboard prompt-icon"></i>
+                    <div class="prompt-title">Escribe tu prompt</div>
+                </div>
+                
+                <div class="prompt-field" contenteditable="true">
+                    Perro CEO medieval con grafiti neon<span class="prompt-cursor"></span>
+                </div>
+                
+                <div class="prompt-suggestions">
+                    <div class="suggestion-tag">Estilo de arte</div>
+                    <div class="suggestion-tag">Iluminación</div>
+                    <div class="suggestion-tag">Composición</div>
+                    <div class="suggestion-tag">Añadir detalles</div>
+                </div>
+                
+                <button class="generate-button" id="generate-btn">
+                    <i class="fas fa-wand-magic-sparkles generate-icon"></i>
+                    Generar
+                </button>
+            </div>
+            
+            <!-- Right side - Result -->
+            <div class="result-side">
+                <div class="loading-indicator" id="loading"></div>
+                
+                <div class="image-result">
+                    <div class="img-dog" id="result-image">
+                        <div class="dog-placeholder">
+                            <div class="medieval-bg">
+                                <div class="stone-wall"></div>
+                            </div>
+                            
+                            <div class="dog-head">
+                                <div class="crown">
+                                    <div class="crown-point"></div>
+                                    <div class="crown-point"></div>
+                                    <div class="crown-point"></div>
+                                </div>
+                                <div class="dog-ear dog-ear-left"></div>
+                                <div class="dog-ear dog-ear-right"></div>
+                                <div class="dog-eye dog-eye-left"></div>
+                                <div class="dog-eye dog-eye-right"></div>
+                                <div class="dog-nose"></div>
+                            </div>
+                            
+                            <div class="dog-body">
+                                <div class="tie"></div>
+                            </div>
+                            
+                            <div class="neon-tag">WOOF CORP</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="image-overlay">
+                    <i class="fas fa-image overlay-icon"></i>
+                    <span>DALL·E 3</span>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Gemini note -->
+        <div class="gemini-note">
+            <i class="fas fa-lightbulb" style="color: #fe0096; margin-right: 10px;"></i>
+            <span>Nota: <span class="note-highlight">Gemini 2.5 Pro</span> entiende estilos visuales y paletas de colores específicos, ideal para generar mockups mejorados de front-end UI con mayor precisión.</span>
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+    <script>
+        // Demo functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const generateBtn = document.getElementById('generate-btn');
+            const loading = document.getElementById('loading');
+            const resultImage = document.getElementById('result-image');
+            
+            generateBtn.addEventListener('click', function() {
+                // Show loading animation
+                loading.style.display = 'block';
+                resultImage.style.opacity = '0.3';
+                
+                // Simulate image generation
+                setTimeout(function() {
+                    loading.style.display = 'none';
+                    resultImage.style.opacity = '1';
+                    
+                    // Here we would actually display the generated image
+                    // For now, we just show our placeholder
+                }, 2000);
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Organización & Datos</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .workflow-container {
+            width: 90%;
+            max-width: 1000px;
+            height: 300px;
+            position: relative;
+            z-index: 5;
+            margin-bottom: 40px;
+        }
+        .workflow-path {
+            position: absolute;
+            top: 50%;
+            left: 0;
+            width: 100%;
+            height: 6px;
+            background: linear-gradient(90deg, rgba(254, 0, 150, 0.5), rgba(43, 203, 251, 0.5));
+            transform: translateY(-50%);
+            z-index: 1;
+            border-radius: 3px;
+        }
+        .service-node {
+            position: absolute;
+            width: 120px;
+            height: 120px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 2;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            transition: all 0.3s ease;
+        }
+        .service-node:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(254, 0, 150, 0.3);
+            border-color: #fe0096;
+        }
+        .node-icon {
+            font-size: 36px;
+            margin-bottom: 10px;
+            color: #2bcbfb;
+        }
+        .node-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+        }
+        .node-1 {
+            top: 50%;
+            left: 5%;
+            transform: translateY(-50%);
+        }
+        .node-2 {
+            top: 50%;
+            left: 33%;
+            transform: translateY(-50%);
+        }
+        .node-3 {
+            top: 50%;
+            left: 61%;
+            transform: translateY(-50%);
+        }
+        .node-4 {
+            top: 50%;
+            left: 89%;
+            transform: translateY(-50%);
+        }
+        .data-packet {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            background: #fe0096;
+            border-radius: 50%;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 3;
+            box-shadow: 0 0 15px rgba(254, 0, 150, 0.8);
+            animation: movePacket 5s infinite;
+            opacity: 0;
+        }
+        @keyframes movePacket {
+            0% { left: 10%; opacity: 1; }
+            24% { left: 33%; opacity: 1; }
+            25% { left: 33%; transform: translateY(-50%) scale(0.2); opacity: 0; }
+            26% { left: 33%; transform: translateY(-50%) scale(1); opacity: 1; }
+            49% { left: 61%; opacity: 1; }
+            50% { left: 61%; transform: translateY(-50%) scale(0.2); opacity: 0; }
+            51% { left: 61%; transform: translateY(-50%) scale(1); opacity: 1; }
+            74% { left: 89%; opacity: 1; }
+            75% { left: 89%; transform: translateY(-50%) scale(0.2); opacity: 0; }
+            76% { left: 89%; transform: translateY(-50%) scale(1); opacity: 1; }
+            99% { left: 100%; opacity: 1; }
+            100% { left: 100%; opacity: 0; }
+        }
+        .value-bubbles {
+            display: flex;
+            justify-content: center;
+            gap: 60px;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 5;
+        }
+        .value-bubble {
+            width: 150px;
+            height: 150px;
+            background: rgba(8, 40, 61, 0.6);
+            border-radius: 50%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 2px solid rgba(43, 203, 251, 0.4);
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+        .value-bubble:hover {
+            transform: scale(1.1);
+            border-color: #fe0096;
+        }
+        .bubble-emoji {
+            font-size: 36px;
+            margin-bottom: 10px;
+        }
+        .bubble-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: white;
+            text-align: center;
+        }
+        .bubble-glow {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            background: radial-gradient(circle, rgba(43, 203, 251, 0.2) 0%, rgba(43, 203, 251, 0) 70%);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+            z-index: -1;
+        }
+        .value-bubble:hover .bubble-glow {
+            opacity: 1;
+        }
+        .challenge-container {
+            width: 80%;
+            max-width: 800px;
+            background: rgba(254, 0, 150, 0.1);
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            z-index: 5;
+            border-left: 4px solid #fe0096;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .challenge-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .challenge-icon {
+            color: #fe0096;
+            font-size: 28px;
+            margin-right: 15px;
+        }
+        .challenge-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.9);
+            line-height: 1.5;
+        }
+        .timer {
+            display: inline-block;
+            background: rgba(43, 203, 251, 0.2);
+            border-radius: 10px;
+            padding: 5px 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            color: #2bcbfb;
+            margin: 0 5px;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        .node-pulse {
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { transform: translateY(-50%) scale(1); }
+            50% { transform: translateY(-50%) scale(1.05); }
+            100% { transform: translateY(-50%) scale(1); }
+        }
+        .node-active {
+            border-color: #fe0096;
+            box-shadow: 0 0 20px rgba(254, 0, 150, 0.5);
+        }
+        .service-tag {
+            position: absolute;
+            top: -15px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #031e31;
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            font-weight: 600;
+            color: rgba(255, 255, 255, 0.9);
+            white-space: nowrap;
+        }
+        .notification-badge {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 25px;
+            height: 25px;
+            background: #fe0096;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: white;
+            opacity: 0;
+            transform: scale(0);
+            transition: all 0.3s ease;
+        }
+        .node-active .notification-badge {
+            opacity: 1;
+            transform: scale(1);
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px;
+        }
+
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">Organización & Datos</h1>
+        
+        <!-- Workflow animation -->
+        <div class="workflow-container">
+            <div class="workflow-path"></div>
+            
+            <!-- Node 1: Drive -->
+            <div class="service-node node-1" id="node-1">
+                <div class="service-tag">Trigger</div>
+                <i class="fab fa-google-drive node-icon"></i>
+                <div class="node-label">Etiqueta en Drive</div>
+                <div class="notification-badge">1</div>
+            </div>
+            
+            <!-- Node 2: Make -->
+            <div class="service-node node-2" id="node-2">
+                <div class="service-tag">Automator</div>
+                <i class="fas fa-cogs node-icon"></i>
+                <div class="node-label">Make</div>
+                <div class="notification-badge">1</div>
+            </div>
+            
+            <!-- Node 3: Notion -->
+            <div class="service-node node-3" id="node-3">
+                <div class="service-tag">Database</div>
+                <i class="fas fa-database node-icon"></i>
+                <div class="node-label">Nuevo item en Notion</div>
+                <div class="notification-badge">1</div>
+            </div>
+            
+            <!-- Node 4: Telegram -->
+            <div class="service-node node-4" id="node-4">
+                <div class="service-tag">Notification</div>
+                <i class="fab fa-telegram-plane node-icon"></i>
+                <div class="node-label">Recordatorio en Telegram</div>
+                <div class="notification-badge">1</div>
+            </div>
+            
+            <!-- Data packet animation -->
+            <div class="data-packet" id="data-packet"></div>
+        </div>
+        
+        <!-- Value bubbles -->
+        <div class="value-bubbles">
+            <!-- Bubble 1: No code -->
+            <div class="value-bubble">
+                <div class="bubble-glow"></div>
+                <div class="bubble-emoji">⚙️</div>
+                <div class="bubble-text">sin-código</div>
+            </div>
+            
+            <!-- Bubble 2: 24/7 -->
+            <div class="value-bubble">
+                <div class="bubble-glow"></div>
+                <div class="bubble-emoji">⏰</div>
+                <div class="bubble-text">24/7</div>
+            </div>
+            
+            <!-- Bubble 3: Zero errors -->
+            <div class="value-bubble">
+                <div class="bubble-glow"></div>
+                <div class="bubble-emoji">🛡️</div>
+                <div class="bubble-text">cero errores</div>
+            </div>
+        </div>
+        
+        <!-- Challenge container -->
+        <div class="challenge-container">
+            <div class="challenge-title">
+                <i class="fas fa-rocket challenge-icon"></i>
+                <span>Mini-Challenge</span>
+            </div>
+            <div class="challenge-text">
+                Piensa en una tarea repetitiva que haces regularmente, imagina automatizarla con IA y calcula cuánto tiempo ahorrarías en <span class="timer">1 mes</span>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        // Animation for workflow process
+        document.addEventListener('DOMContentLoaded', function() {
+            const nodes = document.querySelectorAll('.service-node');
+            const dataPacket = document.getElementById('data-packet');
+            
+            // Function to animate the workflow
+            function animateWorkflow() {
+                setTimeout(() => {
+                    nodes[0].classList.add('node-active', 'node-pulse');
+                }, 500);
+                
+                setTimeout(() => {
+                    nodes[0].classList.remove('node-pulse');
+                    dataPacket.style.opacity = '1';
+                    dataPacket.style.animation = 'movePacket 5s infinite';
+                }, 1500);
+                
+                setTimeout(() => {
+                    nodes[1].classList.add('node-active', 'node-pulse');
+                }, 2000);
+                
+                setTimeout(() => {
+                    nodes[1].classList.remove('node-pulse');
+                }, 3000);
+                
+                setTimeout(() => {
+                    nodes[2].classList.add('node-active', 'node-pulse');
+                }, 3500);
+                
+                setTimeout(() => {
+                    nodes[2].classList.remove('node-pulse');
+                }, 4500);
+                
+                setTimeout(() => {
+                    nodes[3].classList.add('node-active', 'node-pulse');
+                }, 5000);
+                
+                setTimeout(() => {
+                    nodes[3].classList.remove('node-pulse');
+                }, 6000);
+                
+                // Reset after complete cycle
+                setTimeout(() => {
+                    nodes.forEach(node => {
+                        node.classList.remove('node-active');
+                    });
+                }, 7000);
+            }
+            
+            // Start animation and repeat
+            animateWorkflow();
+            setInterval(animateWorkflow, 8000);
+        });
+    </script>
+
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+</body>
+</html>

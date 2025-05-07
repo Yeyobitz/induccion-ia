@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elegir el modelo adecuado</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&family=Press+Start+2P&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .cards-container {
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            margin-bottom: 40px;
+            position: relative;
+            z-index: 5;
+        }
+        .pokemon-card {
+            width: 280px;
+            height: 400px;
+            border-radius: 15px;
+            position: relative;
+            transition: all 0.3s ease;
+            transform-style: preserve-3d;
+            perspective: 1000px;
+        }
+        .pokemon-card:hover {
+            transform: translateY(-20px) rotate3d(0, 1, 0, 10deg);
+            z-index: 10;
+        }
+        .card-inner {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+        }
+        .card-background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            border-radius: 15px;
+            z-index: 1;
+            opacity: 0.7;
+        }
+        .card-gpt-bg {
+            background: linear-gradient(145deg, #0a4a6e, #062f4a);
+            border: 3px solid #10a37f;
+        }
+        .card-claude-bg {
+            background: linear-gradient(145deg, #4a1d66, #2e0f40);
+            border: 3px solid #8c52ff;
+        }
+        .card-gemini-bg {
+            background: linear-gradient(145deg, #3c1053, #1a0631);
+            border: 3px solid #9c27b0;
+        }
+        .card-content {
+            position: relative;
+            z-index: 2;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .card-title {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: white;
+            text-shadow: 1px 1px 2px black;
+        }
+        .card-hp {
+            font-family: 'Press Start 2P', cursive;
+            font-size: 14px;
+            color: #ff3860;
+            background: rgba(0, 0, 0, 0.3);
+            padding: 3px 8px;
+            border-radius: 10px;
+            text-shadow: 1px 1px 2px black;
+        }
+        .card-image {
+            height: 140px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            border: 2px solid rgba(255, 255, 255, 0.2);
+        }
+        .card-icon {
+            font-size: 60px;
+            filter: drop-shadow(0 0 10px rgba(0, 0, 0, 0.5));
+        }
+        .card-type {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.8);
+            margin-bottom: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 20px;
+            align-self: flex-start;
+        }
+        .card-description {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: white;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.7);
+            line-height: 1.4;
+        }
+        .card-stats {
+            background: rgba(0, 0, 0, 0.4);
+            border-radius: 10px;
+            padding: 10px;
+            margin-top: auto;
+        }
+        .stat-row {
+            display: flex;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.9);
+            width: 70px;
+        }
+        .stat-bar-container {
+            flex-grow: 1;
+            height: 10px;
+            background: rgba(0, 0, 0, 0.3);
+            border-radius: 5px;
+            overflow: hidden;
+        }
+        .stat-bar {
+            height: 100%;
+            border-radius: 5px;
+        }
+        .card-footer {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 12px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .holographic-effect {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(125deg, 
+                rgba(255,255,255,0) 0%, 
+                rgba(255,255,255,0.05) 25%, 
+                rgba(255,255,255,0.1) 50%, 
+                rgba(255,255,255,0.05) 75%, 
+                rgba(255,255,255,0) 100%);
+            background-size: 200% 200%;
+            animation: holographic 3s ease infinite;
+            border-radius: 15px;
+            z-index: 3;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+        .pokemon-card:hover .holographic-effect {
+            opacity: 1;
+        }
+        .note-container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 15px;
+            padding: 15px 25px;
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            margin-bottom: 30px;
+            border: 1px solid rgba(43, 203, 251, 0.3);
+        }
+        .note-icon {
+            font-size: 36px;
+            color: #2bcbfb;
+            margin-right: 20px;
+        }
+        .note-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: white;
+            line-height: 1.5;
+        }
+        .tip-container {
+            width: 90%;
+            max-width: 700px;
+            background: rgba(254, 0, 150, 0.1);
+            border-radius: 15px;
+            padding: 15px 25px;
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            border-left: 4px solid #fe0096;
+        }
+        .tip-icon {
+            font-size: 36px;
+            color: #fe0096;
+            margin-right: 20px;
+        }
+        .tip-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: white;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #2bcbfb;
+            font-weight: 700;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        @keyframes holographic {
+            0% { background-position: 0% 0%; }
+            50% { background-position: 100% 100%; }
+            100% { background-position: 0% 0%; }
+        }
+
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px;
+        }
+
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">La Santísima Trinidad 2025</h1>
+        
+        <!-- Pokemon-style cards container -->
+        <div class="cards-container">
+            <!-- GPT-4o Card -->
+            <div class="pokemon-card">
+                <div class="card-inner card-gpt-bg">
+                    <div class="holographic-effect"></div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">GPT o4-mini</div>
+                            <div class="card-hp">128K</div>
+                        </div>                        
+                        <div class="card-image">
+                            <i class="fas fa-brain card-icon" style="color: #10a37f;"></i>
+                        </div>
+                        
+                        <div class="card-type">RAZONADOR MULTIMODAL</div>
+                        
+                        <div class="card-description">
+                            Modelo multimodal de OpenAI con comprensión profunda y capacidad de razonamiento. Puede procesar texto, imágenes, audio y video.
+                        </div>
+                        
+                        <div class="card-stats">
+                            <div class="stat-row">
+                                <div class="stat-label">Razon.</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 95%; background: linear-gradient(90deg, #10a37f, #15d8a8);"></div>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-label">Rapidez</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 65%; background: linear-gradient(90deg, #10a37f, #15d8a8);"></div>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-label">Contexto</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 80%; background: linear-gradient(90deg, #10a37f, #15d8a8);"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <span>o3 también disponible</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Claude 3.7 Card -->
+            <div class="pokemon-card">
+                <div class="card-inner card-claude-bg">
+                    <div class="holographic-effect"></div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">CLAUDE 3.7</div>
+                            <div class="card-hp">200K</div>
+                        </div>                        
+                        <div class="card-image">
+                            <i class="fas fa-scroll card-icon" style="color: #8c52ff;"></i>
+                        </div>
+                        
+                        <div class="card-type">CONTEXTO GIGANTE</div>
+                        
+                        <div class="card-description">
+                            Especialista en explicaciones detalladas y contexto extenso. Ideal para analizar documentos largos y dar respuestas bien estructuradas.
+                        </div>
+                        
+                        <div class="card-stats">
+                            <div class="stat-row">
+                                <div class="stat-label">Razon.</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 90%; background: linear-gradient(90deg, #6936f5, #8c52ff);"></div>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-label">Rapidez</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 70%; background: linear-gradient(90deg, #6936f5, #8c52ff);"></div>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-label">Contexto</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 98%; background: linear-gradient(90deg, #6936f5, #8c52ff);"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <span>Antropic</span>
+                            <span>Explicaciones claras</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Gemini 2.5 Pro Card -->
+            <div class="pokemon-card">
+                <div class="card-inner card-gemini-bg">
+                    <div class="holographic-effect"></div>
+                    <div class="card-content">
+                        <div class="card-header">
+                            <div class="card-title">GEMINI 2.5 PRO</div>
+                            <div class="card-hp">1M</div>
+                        </div>
+                        
+                        <div class="card-image">
+                            <i class="fas fa-bolt card-icon" style="color: #9c27b0;"></i>
+                        </div>
+                        
+                        <div class="card-type">VELOCIDAD + UI + MULTIMODAL + CONTEXTO GIGANTE</div>
+                        
+                        <div class="card-description">
+                            Destaca por su velocidad y comprensión de elementos visuales/UI. Excelente para diseño y prototipado de interfaces.
+                        </div>
+                        
+                        <div class="card-stats">
+                            <div class="stat-row">
+                                <div class="stat-label">Razon.</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 85%; background: linear-gradient(90deg, #8021a8, #d741fc);"></div>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-label">Rapidez</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 95%; background: linear-gradient(90deg, #8021a8, #d741fc);"></div>
+                                </div>
+                            </div>
+                            <div class="stat-row">
+                                <div class="stat-label">UI Design</div>
+                                <div class="stat-bar-container">
+                                    <div class="stat-bar" style="width: 92%; background: linear-gradient(90deg, #8021a8, #d741fc);"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="card-footer">
+                            <span>Google</span>
+                            <span>UI Estética 📱</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Cursor Pro Note -->
+        <div class="note-container">
+            <div class="note-icon">
+                <i class="fas fa-laptop-code"></i>
+            </div>
+            <div class="note-text">
+                Todos disponibles en <span class="highlight">Cursor Pro</span> (500 fast requests/mes) — La mejor experiencia de coding con IA.
+            </div>
+        </div>
+        
+        <!-- Tip -->
+        <div class="tip-container">
+            <div class="tip-icon">
+                <i class="fas fa-lightbulb"></i>
+            </div>
+            <div class="tip-text">
+                Cambia de modelo según tarea; no existe la llave maestra.
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+</body>
+</html>

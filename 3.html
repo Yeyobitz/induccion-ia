@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>¿Qué es la IA?</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .split-container {
+            display: flex;
+            width: 100%;
+            height: 500px;
+            position: relative;
+            z-index: 2;
+        }
+        .left-side, .right-side {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            padding: 20px;
+        }
+        .left-side::after {
+            content: '';
+            position: absolute;
+            top: 10%;
+            right: 0;
+            height: 80%;
+            width: 1px;
+            background: linear-gradient(to bottom, transparent, rgba(254, 0, 150, 0.8), transparent);
+        }
+        .brain-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+        .chip-container {
+            position: relative;
+            width: 280px;
+            height: 280px;
+        }
+        .brain-svg, .chip-svg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+        }
+        .concept-label {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            margin-top: 20px;
+            color: white;
+        }
+        .examples-container {
+            display: flex;
+            justify-content: space-around;
+            margin-top: 40px;
+            width: 100%;
+            position: relative;
+            z-index: 5;
+        }
+        .example-card {
+            width: 270px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(43, 203, 251, 0.1);
+            transition: all 0.3s ease;
+        }
+        .example-card:hover {
+            transform: translateY(-10px);
+            border-color: rgba(254, 0, 150, 0.5);
+            box-shadow: 0 15px 25px rgba(254, 0, 150, 0.15);
+        }
+        .example-icon {
+            font-size: 40px;
+            margin-bottom: 15px;
+            color: #2bcbfb;
+        }
+        .example-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            text-align: center;
+            color: white;
+        }
+        .question-container {
+            margin-top: 30px;
+            margin-bottom: 30px;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            position: relative;
+            z-index: 5;
+        }
+        .question-box {
+            background: rgba(254, 0, 150, 0.1);
+            border: 2px solid rgba(254, 0, 150, 0.3);
+            border-radius: 20px;
+            padding: 20px 40px;
+            max-width: 800px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(254, 0, 150, 0.1);
+            animation: pulse 3s infinite;
+        }
+        .question-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 24px;
+            color: white;
+        }
+        .pause-text {
+            font-family: 'Poppins', sans-serif;
+            font-style: italic;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 10px;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        @keyframes pulse {
+            0% { box-shadow: 0 0 0 0 rgba(254, 0, 150, 0.4); }
+            70% { box-shadow: 0 0 0 20px rgba(254, 0, 150, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(254, 0, 150, 0); }
+        }
+        .brain-glow, .chip-glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            filter: blur(50px);
+            z-index: -1;
+        }
+        .brain-glow {
+            background-color: rgba(43, 203, 251, 0.2);
+            top: 40px;
+            left: 40px;
+        }
+        .chip-glow {
+            background-color: rgba(254, 0, 150, 0.2);
+            top: 40px;
+            left: 40px;
+        }
+        .sprout {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            background-color: #4CAF50;
+            box-shadow: 0 0 10px #4CAF50;
+            animation: float 3s ease-in-out infinite alternate;
+        }
+        .sprout-1 { top: 50px; left: 120px; animation-delay: 0s; }
+        .sprout-2 { top: 40px; left: 180px; animation-delay: 0.5s; }
+        .sprout-3 { top: 100px; left: 220px; animation-delay: 1s; }
+        .sprout-4 { top: 150px; left: 70px; animation-delay: 1.5s; }
+        .sprout-5 { top: 180px; left: 160px; animation-delay: 2s; }
+        
+        .circuit-line {
+            position: absolute;
+            background-color: #2bcbfb;
+            animation: glow 2s infinite alternate;
+        }
+        .horizontal-line-1 { width: 80px; height: 2px; top: 80px; left: 100px; }
+        .horizontal-line-2 { width: 120px; height: 2px; top: 150px; left: 80px; }
+        .horizontal-line-3 { width: 60px; height: 2px; top: 200px; left: 120px; }
+        .vertical-line-1 { width: 2px; height: 70px; top: 80px; left: 100px; }
+        .vertical-line-2 { width: 2px; height: 50px; top: 150px; left: 200px; }
+        .vertical-line-3 { width: 2px; height: 100px; top: 100px; left: 160px; }
+        
+        .gear {
+            position: absolute;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            border: 4px dotted #fe0096;
+            animation: rotate 10s linear infinite;
+        }
+        .gear-1 { top: 100px; left: 140px; width: 50px; height: 50px; }
+        .gear-2 { top: 170px; left: 190px; width: 40px; height: 40px; animation-direction: reverse; }
+        .gear-3 { top: 80px; left: 220px; width: 30px; height: 30px; }
+        
+        @keyframes float {
+            0% { transform: translateY(0); }
+            100% { transform: translateY(-10px); }
+        }
+        @keyframes glow {
+            0% { box-shadow: 0 0 5px #2bcbfb; }
+            100% { box-shadow: 0 0 15px #2bcbfb; }
+        }
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000; /* Ensure buttons are on top */
+            background-color: transparent; /* Minimalist background */
+            color: rgba(255, 255, 255, 0.7); /* Arrow color */
+            border: none; /* No border for minimalist look */
+            padding: 10px;
+            font-family: 'Courier New', monospace; /* Pixel-art feel font */
+            font-size: 48px; /* Larger arrow */
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096; /* Hover effect - pink */
+            transform: translateY(-50%) scale(1.1); /* Slightly larger on hover */
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px; /* Position on the left */
+        }
+
+        #nextButton {
+            right: 30px; /* Position on the right */
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">¿Qué es la IA?</h1>
+        
+        <!-- Split container for brain and chip -->
+        <div class="split-container">
+            <!-- Left side - Brain with creativity -->
+            <div class="left-side">
+                <div class="brain-container">
+                    <div class="brain-glow"></div>
+                    <!-- Brain representation with SVG -->
+                    <svg class="brain-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M150,70 C80,70 70,150 70,190 C70,230 120,250 150,250 C180,250 230,230 230,190 C230,150 220,70 150,70" 
+                              fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="5"></path>
+                        <path d="M150,100 C110,100 100,140 100,170 C100,200 120,220 150,220 C180,220 200,200 200,170 C200,140 190,100 150,100" 
+                              fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="3"></path>
+                        <path d="M150,130 Q120,130 120,150 Q120,170 150,170 Q180,170 180,150 Q180,130 150,130" 
+                              fill="none" stroke="rgba(255,255,255,0.6)" stroke-width="2"></path>
+                    </svg>
+                    <!-- Green sprouts representing creativity -->
+                    <div class="sprout sprout-1"></div>
+                    <div class="sprout sprout-2"></div>
+                    <div class="sprout sprout-3"></div>
+                    <div class="sprout sprout-4"></div>
+                    <div class="sprout sprout-5"></div>
+                </div>
+                <div class="concept-label">Creatividad 🌱</div>
+            </div>
+            
+            <!-- Right side - Chip with circuits -->
+            <div class="right-side">
+                <div class="chip-container">
+                    <div class="chip-glow"></div>
+                    <!-- Chip representation -->
+                    <svg class="chip-svg" viewBox="0 0 300 300" xmlns="http://www.w3.org/2000/svg">
+                        <rect x="70" y="70" width="160" height="160" rx="10" 
+                              fill="none" stroke="#fe0096" stroke-width="4"></rect>
+                        <rect x="90" y="90" width="120" height="120" rx="5" 
+                              fill="none" stroke="#2bcbfb" stroke-width="2"></rect>
+                        <line x1="70" y1="110" x2="50" y2="110" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="70" y1="150" x2="50" y2="150" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="70" y1="190" x2="50" y2="190" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="230" y1="110" x2="250" y2="110" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="230" y1="150" x2="250" y2="150" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="230" y1="190" x2="250" y2="190" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="110" y1="70" x2="110" y2="50" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="150" y1="70" x2="150" y2="50" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="190" y1="70" x2="190" y2="50" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="110" y1="230" x2="110" y2="250" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="150" y1="230" x2="150" y2="250" stroke="#2bcbfb" stroke-width="2"></line>
+                        <line x1="190" y1="230" x2="190" y2="250" stroke="#2bcbfb" stroke-width="2"></line>
+                    </svg>
+                    <!-- Circuit lines -->
+                    <div class="circuit-line horizontal-line-1"></div>
+                    <div class="circuit-line horizontal-line-2"></div>
+                    <div class="circuit-line horizontal-line-3"></div>
+                    <div class="circuit-line vertical-line-1"></div>
+                    <div class="circuit-line vertical-line-2"></div>
+                    <div class="circuit-line vertical-line-3"></div>
+                    <!-- Gears -->
+                    <div class="gear gear-1"></div>
+                    <div class="gear gear-2"></div>
+                    <div class="gear gear-3"></div>
+                </div>
+                <div class="concept-label">Cálculo 🌐</div>
+            </div>
+        </div>
+        
+        <!-- Examples section -->
+        <div class="examples-container">
+            <!-- Example 1 -->
+            <div class="example-card">
+                <i class="fas fa-microphone-alt example-icon"></i>
+                <div class="example-text">"Oye Siri, ¿qué hora es?"</div>
+            </div>
+            
+            <!-- Example 2 -->
+            <div class="example-card">
+                <i class="fas fa-tv example-icon"></i>
+                <div class="example-text">Netflix sugiere maratón</div>
+            </div>
+            
+            <!-- Example 3 -->
+            <div class="example-card">
+                <i class="fas fa-envelope example-icon"></i>
+                <div class="example-text">Auto-completado Gmail</div>
+            </div>
+        </div>
+        
+        <!-- Interactive Question -->
+        <div class="question-container">
+            <div class="question-box">
+                <div class="question-text">¿Dónde ya usas IA sin notarlo?</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+</body>
+</html>

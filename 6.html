@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Texto & Escritura</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 40px;
+            margin-bottom: 40px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .content-container {
+            display: flex;
+            width: 100%;
+            justify-content: space-between;
+            padding: 0 50px;
+            position: relative;
+            z-index: 5;
+        }
+        .text-bubble-container {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .text-bubble {
+            width: 100%;
+            max-width: 500px;
+            min-height: 200px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 20px;
+            padding: 25px;
+            position: relative;
+            margin-bottom: 30px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+        .text-bubble:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 30px rgba(254, 0, 150, 0.2);
+            border-color: #fe0096;
+        }
+        .text-bubble::after {
+            content: '';
+            position: absolute;
+            bottom: -20px;
+            left: 50px;
+            width: 0;
+            height: 0;
+            border-left: 20px solid transparent;
+            border-right: 20px solid transparent;
+            border-top: 20px solid rgba(8, 40, 61, 0.7);
+        }
+        .original-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            color: rgba(255, 255, 255, 0.7);
+            text-align: center;
+            margin-bottom: 0;
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        .rewrite-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 24px;
+            font-weight: 500;
+            color: #2bcbfb;
+            text-align: center;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            margin: 10px 0;
+        }
+        .final-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 700;
+            color: #fe0096;
+            text-align: center;
+            opacity: 0;
+            height: 0;
+            overflow: hidden;
+            transition: all 0.5s ease;
+            margin: 10px 0;
+        }
+        .click-prompt {
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.6);
+            text-align: center;
+            margin-top: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .click-icon {
+            color: #2bcbfb;
+            font-size: 20px;
+            margin-right: 8px;
+            animation: pulse 1.5s infinite;
+        }
+        .other-uses-container {
+            flex: 0 0 45%;
+            display: flex;
+            flex-direction: column;
+        }
+        .uses-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+        .use-card {
+            background: rgba(8, 40, 61, 0.5);
+            border-radius: 15px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            transition: all 0.3s ease;
+            border: 1px solid rgba(43, 203, 251, 0.2);
+            cursor: pointer;
+        }
+        .use-card:hover {
+            transform: translateY(-10px);
+            border-color: #fe0096;
+            box-shadow: 0 10px 20px rgba(254, 0, 150, 0.2);
+        }
+        .use-icon {
+            font-size: 36px;
+            margin-bottom: 15px;
+            color: #2bcbfb;
+        }
+        .use-label {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            font-weight: 500;
+            color: white;
+            text-align: center;
+        }
+        .interaction-container {
+            background: rgba(254, 0, 150, 0.1);
+            border-radius: 15px;
+            padding: 25px;
+            border-left: 4px solid #fe0096;
+            margin-top: 20px;
+        }
+        .interaction-title {
+            font-family: 'Poppins', sans-serif;
+            font-size: 22px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .interaction-icon {
+            color: #fe0096;
+            font-size: 24px;
+            margin-right: 10px;
+        }
+        .interaction-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: rgba(255, 255, 255, 0.8);
+            line-height: 1.5;
+        }
+        .example-container {
+            display: flex;
+            margin-top: 15px;
+        }
+        .example-before {
+            flex: 1;
+            background: rgba(8, 40, 61, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            margin-right: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .example-after {
+            flex: 1;
+            background: rgba(43, 203, 251, 0.1);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 16px;
+            color: #2bcbfb;
+        }
+        .transform-arrow {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 10px;
+            color: #fe0096;
+            font-size: 24px;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.2); opacity: 0.7; }
+        }
+        .highlighted {
+            background: linear-gradient(90deg, rgba(254, 0, 150, 0.2), rgba(43, 203, 251, 0.2));
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-weight: 700;
+        }
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 24px;
+            background-color: #fe0096;
+            margin-left: 4px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px;
+        }
+
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">Texto & Escritura</h1>
+        
+        <!-- Main content -->
+        <div class="content-container">
+            <!-- Left side with text bubble -->
+            <div class="text-bubble-container">
+                <div class="text-bubble" id="text-bubble">
+                    <p class="original-text" id="original-text">Hoy fue un día productivo</p>
+                    <p class="rewrite-text" id="rewrite-1">Hoy maximicé mi productividad laboral con resultados significativos</p>
+                    <p class="rewrite-text" id="rewrite-2">Demolí mi lista de pendientes como un profesional en día de cierre</p>
+                    <p class="final-text" id="final-text">Exprimí cada segundo como si cerrara trimestre mañana</p>
+                    <div class="click-prompt">
+                        <i class="fas fa-mouse-pointer click-icon"></i>
+                        <span>Haz clic para reescribir</span>
+                    </div>
+                </div>
+                
+                <div style="font-family: 'Poppins', sans-serif; font-size: 18px; color: #2bcbfb; text-align: center; margin-top: 20px;">
+                    <div style="margin-bottom: 10px;">De texto básico a lenguaje poderoso</div>
+                    <div style="display: flex; align-items: center; justify-content: center;">
+                        <div style="width: 15px; height: 15px; background-color: rgba(255,255,255,0.7); border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="color: rgba(255,255,255,0.7);">Básico</span>
+                        <div style="width: 60px; height: 2px; background: linear-gradient(90deg, rgba(255,255,255,0.7), #2bcbfb); margin: 0 10px;"></div>
+                        <div style="width: 15px; height: 15px; background-color: #2bcbfb; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="color: #2bcbfb;">Profesional</span>
+                        <div style="width: 60px; height: 2px; background: linear-gradient(90deg, #2bcbfb, #fe0096); margin: 0 10px;"></div>
+                        <div style="width: 15px; height: 15px; background-color: #fe0096; border-radius: 50%; margin-right: 10px;"></div>
+                        <span style="color: #fe0096;">Memorable</span>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right side with other uses -->
+            <div class="other-uses-container">
+                <div class="uses-grid">
+                    <!-- Use 1: Translation -->
+                    <div class="use-card">
+                        <i class="fas fa-globe use-icon"></i>
+                        <div class="use-label">Traducción instantánea 🌍</div>
+                    </div>
+                    
+                    <!-- Use 2: Error-free emails -->
+                    <div class="use-card">
+                        <i class="fas fa-envelope use-icon"></i>
+                        <div class="use-label">Mails sin errores ✉️</div>
+                    </div>
+                    
+                    <!-- Use 3: Brainstorming -->
+                    <div class="use-card">
+                        <i class="fas fa-lightbulb use-icon"></i>
+                        <div class="use-label">Lluvia de ideas 💡</div>
+                    </div>
+                    
+                    <!-- Use 4: Summarization -->
+                    <div class="use-card">
+                        <i class="fas fa-compress-alt use-icon"></i>
+                        <div class="use-label">Resúmenes inteligentes 📝</div>
+                    </div>
+                </div>
+                
+                <!-- Live interaction -->
+                <div class="interaction-container">
+                    <div class="interaction-title">
+                        <i class="fas fa-magic interaction-icon"></i>
+                        <span>Interacción en vivo</span>
+                    </div>
+                    <div class="interaction-text">
+                        Pide a alguien un tuit aburrido y mejóralo en vivo con ChatGPT (GPT-4o-mini)
+                    </div>
+                    <div class="example-container">
+                        <div class="example-before">
+                            Fui al supermercado y compré comida.
+                        </div>
+                        <div class="transform-arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                        <div class="example-after">
+                            Sobreviví a una épica aventura en la jungla del supermercado. Mi botín: ¡provisiones para sobrevivir otra semana en la oficina! #MisiónCumplida #GuerreroDelCarrito<span class="cursor-blink"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+    <script>
+        // Text transformation animation
+        document.addEventListener('DOMContentLoaded', function() {
+            const textBubble = document.getElementById('text-bubble');
+            const originalText = document.getElementById('original-text');
+            const rewrite1 = document.getElementById('rewrite-1');
+            const rewrite2 = document.getElementById('rewrite-2');
+            const finalText = document.getElementById('final-text');
+            const clickPrompt = document.querySelector('.click-prompt');
+            
+            let clickCount = 0;
+            
+            textBubble.addEventListener('click', function() {
+                clickCount++;
+                
+                if (clickCount === 1) {
+                    // First click
+                    originalText.style.opacity = '0.3';
+                    rewrite1.style.opacity = '1';
+                    rewrite1.style.height = 'auto';
+                    
+                } else if (clickCount === 2) {
+                    // Second click
+                    rewrite1.style.opacity = '0.3';
+                    rewrite2.style.opacity = '1';
+                    rewrite2.style.height = 'auto';
+                    
+                } else if (clickCount === 3) {
+                    // Third click
+                    rewrite2.style.opacity = '0.3';
+                    finalText.style.opacity = '1';
+                    finalText.style.height = 'auto';
+                    clickPrompt.style.display = 'none';
+                    
+                } else {
+                    // Reset on fourth click
+                    clickCount = 0;
+                    originalText.style.opacity = '1';
+                    rewrite1.style.opacity = '0';
+                    rewrite1.style.height = '0';
+                    rewrite2.style.opacity = '0';
+                    rewrite2.style.height = '0';
+                    finalText.style.opacity = '0';
+                    finalText.style.height = '0';
+                    clickPrompt.style.display = 'flex';
+                }
+            });
+        });
+    </script>
+</body>
+</html>

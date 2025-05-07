@@ -1,0 +1,612 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programar con IA</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&family=Fira+Code:wght@400;600&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .workflow-container {
+            display: flex;
+            width: 90%;
+            max-width: 1100px;
+            gap: 20px;
+            position: relative;
+            z-index: 5;
+            margin-bottom: 30px;
+        }
+        .workflow-step {
+            flex: 1;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            display: flex;
+            flex-direction: column;
+            min-height: 250px;
+            position: relative;
+            overflow: hidden;
+        }
+        .step-number {
+            position: absolute;
+            top: -10px;
+            left: -10px;
+            width: 40px;
+            height: 40px;
+            background: linear-gradient(135deg, #fe0096, #2bcbfb);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 900;
+            font-size: 20px;
+            box-shadow: 0 0 15px rgba(254, 0, 150, 0.5);
+            z-index: 2;
+        }
+        .step-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            margin-bottom: 15px;
+            margin-left: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .step-icon {
+            margin-right: 10px;
+            color: #fe0096;
+            font-size: 22px;
+        }
+        .step-content {
+            flex-grow: 1;
+            background: rgba(3, 30, 49, 0.7);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Fira Code', monospace;
+            font-size: 14px;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+        .prompt-window {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .prompt-header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .prompt-shortcut {
+            background: rgba(254, 0, 150, 0.2);
+            padding: 4px 8px;
+            border-radius: 5px;
+            color: #fe0096;
+            font-weight: 600;
+        }
+        .prompt-text {
+            flex-grow: 1;
+            position: relative;
+            overflow: hidden;
+            line-height: 1.5;
+        }
+        .cursor-blink {
+            display: inline-block;
+            width: 2px;
+            height: 16px;
+            background-color: #fe0096;
+            margin-left: 2px;
+            animation: blink 1s infinite;
+            vertical-align: middle;
+        }
+        .diff-window {
+            height: 100%;
+            position: relative;
+        }
+        .diff-line {
+            margin: 5px 0;
+            padding: 3px 0;
+            border-radius: 3px;
+            white-space: pre;
+        }
+        .diff-line-added {
+            background: rgba(0, 255, 0, 0.1);
+            color: #4afa9a;
+        }
+        .diff-line-removed {
+            background: rgba(255, 0, 0, 0.1);
+            color: #fa4a4a;
+        }
+        .diff-line-context {
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .review-window {
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        .apply-button {
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            border: none;
+            border-radius: 10px;
+            padding: 10px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            margin-top: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 120px;
+            align-self: center;
+            box-shadow: 0 5px 15px rgba(254, 0, 150, 0.3);
+        }
+        .apply-button:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(254, 0, 150, 0.5);
+        }
+        .demo-container {
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+            display: flex;
+            flex-direction: column;
+        }
+        .demo-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .demo-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        .demo-icon {
+            margin-right: 10px;
+            color: #fe0096;
+            font-size: 22px;
+        }
+        .demo-timer {
+            margin-left: 15px;
+            background: rgba(254, 0, 150, 0.2);
+            padding: 5px 10px;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 14px;
+            color: #fe0096;
+        }
+        .demo-steps {
+            display: flex;
+            gap: 15px;
+        }
+        .demo-step {
+            flex: 1;
+            background: rgba(3, 30, 49, 0.5);
+            border-radius: 10px;
+            padding: 15px;
+            font-family: 'Poppins', sans-serif;
+            color: white;
+            position: relative;
+            border-left: 3px solid transparent;
+            transition: all 0.3s ease;
+        }
+        .demo-step:hover {
+            border-left-color: #fe0096;
+            background: rgba(3, 30, 49, 0.7);
+        }
+        .demo-step-number {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            width: 24px;
+            height: 24px;
+            background: rgba(254, 0, 150, 0.3);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+        }
+        .demo-step-content {
+            margin-left: 35px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+        .demo-command {
+            font-family: 'Fira Code', monospace;
+            font-size: 13px;
+            background: rgba(43, 203, 251, 0.1);
+            padding: 5px 10px;
+            border-radius: 5px;
+            color: #2bcbfb;
+            margin-top: 5px;
+            display: inline-block;
+        }
+        .analogy-container {
+            width: 90%;
+            max-width: 800px;
+            background: rgba(254, 0, 150, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+            border-left: 4px solid #fe0096;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+        }
+        .analogy-icon {
+            font-size: 36px;
+            color: #fe0096;
+            margin-right: 20px;
+        }
+        .analogy-text {
+            font-family: 'Poppins', sans-serif;
+            font-size: 18px;
+            color: white;
+            line-height: 1.5;
+        }
+        .highlight {
+            color: #2bcbfb;
+            font-weight: 700;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+        .arrow-container {
+            position: absolute;
+            top: 50%;
+            width: 40px;
+            height: 40px;
+            transform: translateY(-50%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 10;
+        }
+        .arrow-left {
+            right: -20px;
+        }
+        .arrow-right {
+            left: -20px;
+        }
+        .arrow {
+            color: #fe0096;
+            font-size: 24px;
+            filter: drop-shadow(0 0 5px rgba(254, 0, 150, 0.7));
+        }
+        .review-check {
+            font-size: 16px;
+            color: #4afa9a;
+            margin-right: 10px;
+        }
+        .review-item {
+            display: flex;
+            align-items: center;
+            margin: 8px 0;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+        }
+        .yolo-badge {
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            padding: 3px 8px;
+            border-radius: 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 12px;
+            color: white;
+            margin-left: 10px;
+            animation: pulse 2s infinite;
+        }
+        @keyframes pulse {
+            0% { opacity: 1; box-shadow: 0 0 0 0 rgba(254, 0, 150, 0.4); }
+            70% { opacity: 0.8; box-shadow: 0 0 0 10px rgba(254, 0, 150, 0); }
+            100% { opacity: 1; box-shadow: 0 0 0 0 rgba(254, 0, 150, 0); }
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px;
+        }
+
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">Idea → Código sin llorar (mucho)</h1>
+        
+        <!-- Three-column workflow -->
+        <div class="workflow-container">
+            <!-- Step 1: Write prompt -->
+            <div class="workflow-step">
+                <div class="step-number">1</div>
+                <div class="step-title">
+                    <i class="fas fa-keyboard step-icon"></i>
+                    <span>Escribes prompt natural</span>
+                </div>
+                
+                <div class="step-content">
+                    <div class="prompt-window">
+                        <div class="prompt-header">
+                            <span>Cursor Chat</span>
+                            <span class="prompt-shortcut">⌘K</span>
+                        </div>
+                        <div class="prompt-text">
+                            > Añade un endpoint /health para monitorear la disponibilidad del servicio. Debe devolver el status, uptime y versión desde el archivo config.py. Incluye tests unitarios.<span class="cursor-blink"></span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="arrow-container arrow-left">
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+            </div>
+            
+            <!-- Step 2: AI generates diff -->
+            <div class="workflow-step">
+                <div class="step-number">2</div>
+                <div class="step-title">
+                    <i class="fas fa-robot step-icon"></i>
+                    <span>Cursor genera diff</span>
+                </div>
+                
+                <div class="step-content">
+                    <div class="diff-window">
+                        <div class="diff-line diff-line-context">@app.get("/users")</div>
+                        <div class="diff-line diff-line-context">def get_users():</div>
+                        <div class="diff-line diff-line-context">    return db.get_all_users()</div>
+                        <div class="diff-line diff-line-context"></div>
+                        <div class="diff-line diff-line-added">@app.get("/health")</div>
+                        <div class="diff-line diff-line-added">def health_check():</div>
+                        <div class="diff-line diff-line-added">    """Return service health status."""</div>
+                        <div class="diff-line diff-line-added">    from app.config import VERSION</div>
+                        <div class="diff-line diff-line-added">    import time</div>
+                        <div class="diff-line diff-line-added">    </div>
+                        <div class="diff-line diff-line-added">    return {</div>
+                        <div class="diff-line diff-line-added">        "status": "ok",</div>
+                        <div class="diff-line diff-line-added">        "version": VERSION,</div>
+                        <div class="diff-line diff-line-added">        "uptime": time.time() - app.start_time</div>
+                        <div class="diff-line diff-line-added">    }</div>
+                    </div>
+                </div>
+                
+                <div class="arrow-container arrow-left">
+                    <i class="fas fa-chevron-right arrow"></i>
+                </div>
+            </div>
+            
+            <!-- Step 3: Review and apply -->
+            <div class="workflow-step">
+                <div class="step-number">3</div>
+                <div class="step-title">
+                    <i class="fas fa-check-circle step-icon"></i>
+                    <span>Tú revisas y aplicas</span>
+                </div>
+                
+                <div class="step-content">
+                    <div class="review-window">
+                        <div class="review-item">
+                            <i class="fas fa-check review-check"></i>
+                            <span>Endpoint con ruta correcta</span>
+                        </div>
+                        <div class="review-item">
+                            <i class="fas fa-check review-check"></i>
+                            <span>Devuelve datos pedidos</span>
+                        </div>
+                        <div class="review-item">
+                            <i class="fas fa-check review-check"></i>
+                            <span>Importaciones adecuadas</span>
+                        </div>
+                        <div class="review-item">
+                            <i class="fas fa-check review-check"></i>
+                            <span>Docstring explicativo</span>
+                        </div>
+                        
+                        <button class="apply-button">
+                            <i class="fas fa-check" style="margin-right: 8px;"></i>
+                            Apply
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Live demo section -->
+        <div class="demo-container">
+            <div class="demo-header">
+                <div class="demo-title">
+                    <i class="fas fa-play-circle demo-icon"></i>
+                    <span>Live Demo</span>
+                </div>
+                <div class="demo-timer">5 minutos</div>
+            </div>
+            
+            <div class="demo-steps">
+                <!-- Demo Step 1 -->
+                <div class="demo-step">
+                    <div class="demo-step-number">1</div>
+                    <div class="demo-step-content">
+                        Abrir repo demo
+                        <div class="demo-command">git clone https://github.com/demo/fastapi-app</div>
+                    </div>
+                </div>
+                
+                <!-- Demo Step 2 -->
+                <div class="demo-step">
+                    <div class="demo-step-number">2</div>
+                    <div class="demo-step-content">
+                        Preguntar sobre la arquitectura
+                        <div class="demo-command">Explícame la arquitectura</div>
+                    </div>
+                </div>
+                
+                <!-- Demo Step 3 -->
+                <div class="demo-step">
+                    <div class="demo-step-number">3</div>
+                    <div class="demo-step-content">
+                        Implementar endpoint health
+                        <div class="demo-command">Añade endpoint /health en FastAPI con tests</div>
+                    </div>
+                </div>
+                
+                <!-- Demo Step 4 -->
+                <div class="demo-step">
+                    <div class="demo-step-number">4</div>
+                    <div class="demo-step-content">
+                        YOLO mode para tests automáticos
+                        <div class="demo-command">Ejecutar pruebas <span class="yolo-badge">YOLO MODE</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Analogy -->
+        <div class="analogy-container">
+            <div class="analogy-icon">
+                <i class="fas fa-book-reader"></i>
+            </div>
+            <div class="analogy-text">
+                <span class="highlight">Cursor</span> = amigo seco que leyó toda la docu mientras tú abres el README
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+    <script>
+    </script>
+</body>
+</html>

@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio + Video</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 56px;
+            font-weight: 900;
+            text-align: center;
+            margin-top: 30px;
+            margin-bottom: 30px;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 10px rgba(254, 0, 150, 0.3);
+            position: relative;
+            z-index: 5;
+        }
+        .content-container {
+            display: flex;
+            width: 90%;
+            max-width: 1100px;
+            gap: 30px;
+            position: relative;
+            z-index: 5;
+            margin-bottom: 30px;
+        }
+        .audio-block {
+            flex: 1;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 20px;
+            padding: 20px;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            display: flex;
+            flex-direction: column;
+            height: 300px;
+        }
+        .block-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 22px;
+            color: white;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+        }
+        .block-icon {
+            margin-right: 10px;
+            color: #fe0096;
+            font-size: 24px;
+        }
+        .suno-container {
+            flex-grow: 1;
+            background: #081828;
+            border-radius: 15px;
+            overflow: hidden;
+            position: relative;
+            border: 1px solid rgba(43, 203, 251, 0.2);
+        }
+        .suno-header {
+            background: linear-gradient(90deg, #0c2842, #031e31);
+            padding: 10px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(43, 203, 251, 0.2);
+        }
+        .suno-logo {
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 18px;
+            color: #2bcbfb;
+            display: flex;
+            align-items: center;
+        }
+        .suno-logo-icon {
+            margin-right: 8px;
+            font-size: 20px;
+        }
+        .suno-controls {
+            display: flex;
+            gap: 10px;
+        }
+        .suno-button {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(254, 0, 150, 0.2);
+            color: #fe0096;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .suno-button:hover {
+            background: rgba(254, 0, 150, 0.4);
+            transform: scale(1.1);
+        }
+        .suno-content {
+            display: flex;
+            height: calc(100% - 50px);
+        }
+        .suno-waveform {
+            flex: 1;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+        }
+        .track-info {
+            padding: 10px;
+            margin-bottom: 10px;
+        }
+        .track-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+        }
+        .track-genre {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+        }
+        .track-time {
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 10px;
+            display: flex;
+            justify-content: space-between;
+        }
+        .waveform-graphic {
+            flex-grow: 1;
+            background: rgba(3, 30, 49, 0.5);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+            margin-top: 10px;
+        }
+        .wave-bars {
+            display: flex;
+            align-items: flex-end;
+            height: 100%;
+            width: 100%;
+            padding: 0 5px;
+            box-sizing: border-box;
+            position: absolute;
+            bottom: 0;
+        }
+        .wave-bar {
+            flex: 1;
+            margin: 0 1px;
+            background: linear-gradient(180deg, #fe0096, #2bcbfb);
+            border-radius: 2px 2px 0 0;
+        }
+        .elevenlabs-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .voice-comparison {
+            flex: 1;
+            background: #081828;
+            border-radius: 15px;
+            padding: 15px;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            border: 1px solid rgba(43, 203, 251, 0.2);
+        }
+        .comparison-title {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            margin-bottom: 10px;
+            text-align: center;
+        }
+        .voice-wave-container {
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .voice-row {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .voice-label {
+            width: 100px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            color: white;
+            text-align: right;
+        }
+        .voice-wave {
+            flex-grow: 1;
+            height: 50px;
+            background: rgba(3, 30, 49, 0.5);
+            border-radius: 10px;
+            position: relative;
+            overflow: hidden;
+        }
+        .play-button {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #fe0096;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            cursor: pointer;
+            box-shadow: 0 0 15px rgba(254, 0, 150, 0.5);
+            transition: all 0.3s ease;
+        }
+        .play-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px rgba(254, 0, 150, 0.7);
+        }
+        .voice-progress {
+            position: absolute;
+            top: 0;
+            left: 0;
+            height: 100%;
+            width: 0;
+            background: rgba(254, 0, 150, 0.2);
+            border-right: 2px solid #fe0096;
+            transition: width 0.1s linear;
+        }
+        .sub-demo-container {
+            width: 90%;
+            max-width: 1100px;
+            background: rgba(8, 40, 61, 0.7);
+            border-radius: 20px;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+            border: 1px solid rgba(43, 203, 251, 0.3);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.3);
+            margin-bottom: 30px;
+        }
+        .descript-demo {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+        .descript-interface {
+            flex: 2;
+            height: 150px;
+            background: #081828;
+            border-radius: 15px;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid rgba(43, 203, 251, 0.2);
+        }
+        .descript-header {
+            background: linear-gradient(90deg, #0c2842, #031e31);
+            padding: 8px 15px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 1px solid rgba(43, 203, 251, 0.2);
+        }
+        .descript-logo {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            display: flex;
+            align-items: center;
+        }
+        .descript-content {
+            padding: 10px;
+            display: flex;
+            height: calc(100% - 40px);
+        }
+        .media-timeline {
+            flex-grow: 1;
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+        .video-track {
+            height: 30px;
+            background: rgba(3, 30, 49, 0.5);
+            border-radius: 5px;
+            position: relative;
+        }
+        .subtitle-track {
+            height: 25px;
+            background: rgba(3, 30, 49, 0.5);
+            border-radius: 5px;
+            position: relative;
+        }
+        .track-clip {
+            position: absolute;
+            height: 100%;
+            background: linear-gradient(90deg, rgba(254, 0, 150, 0.5), rgba(43, 203, 251, 0.5));
+            border-radius: 5px;
+            top: 0;
+        }
+        .tiktok-export {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        .tiktok-icon {
+            font-size: 40px;
+            color: #2bcbfb;
+            text-shadow: 0 0 10px rgba(43, 203, 251, 0.7);
+        }
+        .export-text {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 16px;
+            color: white;
+            text-align: center;
+        }
+        .export-button {
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            border: none;
+            border-radius: 20px;
+            padding: 8px 20px;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 600;
+            font-size: 14px;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+        .export-button:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(254, 0, 150, 0.3);
+        }
+        .key-message {
+            width: 90%;
+            max-width: 800px;
+            text-align: center;
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            font-size: 28px;
+            color: white;
+            background: rgba(254, 0, 150, 0.1);
+            border-radius: 15px;
+            padding: 20px;
+            position: relative;
+            z-index: 5;
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+        .gradient-text {
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            font-weight: 900;
+        }
+        .background-grid {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: linear-gradient(rgba(43, 203, 251, 0.05) 1px, transparent 1px),
+                              linear-gradient(90deg, rgba(43, 203, 251, 0.05) 1px, transparent 1px);
+            background-size: 50px 50px;
+            z-index: 1;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-top-right {
+            background-color: #fe0096;
+            top: -100px;
+            right: -100px;
+        }
+        .glow-bottom-left {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            left: -100px;
+        }
+        .audio-icon {
+            color: #2bcbfb;
+        }
+        .subtitle-item {
+            position: absolute;
+            height: 100%;
+            background: rgba(43, 203, 251, 0.5);
+            border-radius: 5px;
+        }
+        .subtitle-item:nth-child(odd) {
+            background: rgba(254, 0, 150, 0.5);
+        }
+        .progress-indicator {
+            position: absolute;
+            width: 2px;
+            height: 100%;
+            background-color: #2bcbfb;
+            top: 0;
+            left: 30%;
+            box-shadow: 0 0 10px rgba(43, 203, 251, 0.8);
+            z-index: 2;
+        }
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000;
+            background-color: transparent;
+            color: rgba(255, 255, 255, 0.7);
+            border: none;
+            padding: 10px;
+            font-family: 'Courier New', monospace;
+            font-size: 48px;
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+        .nav-button:hover {
+            color: #fe0096;
+            transform: translateY(-50%) scale(1.1);
+        }
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+        #prevButton {
+            left: 30px;
+        }
+        #nextButton {
+            right: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background elements -->
+        <div class="background-grid"></div>
+        <div class="neon-glow glow-top-right"></div>
+        <div class="neon-glow glow-bottom-left"></div>
+        
+        <!-- Main title -->
+        <h1 class="title">Audio + Video</h1>
+        
+        <!-- Main content - Suno and ElevenLabs -->
+        <div class="content-container">
+            <!-- Left block - Suno -->
+            <div class="audio-block">
+                <div class="block-title">
+                    <i class="fas fa-music block-icon"></i>
+                    <span>Tema creado en Suno (30s)</span>
+                </div>
+                
+                <div class="suno-container">
+                    <div class="suno-header">
+                        <div class="suno-logo">
+                            <i class="fas fa-wave-square suno-logo-icon"></i>
+                            <span>SUNO</span>
+                        </div>
+                        <div class="suno-controls">
+                            <div class="suno-button">
+                                <i class="fas fa-play"></i>
+                            </div>
+                            <div class="suno-button">
+                                <i class="fas fa-download"></i>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="suno-content">
+                        <div class="suno-waveform">
+                            <div class="track-info">
+                                <div class="track-title">"Neon Dreams"</div>
+                                <div class="track-genre">Synthwave • AI Generado</div>
+                            </div>
+                            
+                            <div class="waveform-graphic">
+                                <div class="wave-bars" id="suno-wave-bars"></div>
+                            </div>
+                            
+                            <div class="track-time">
+                                <span>0:12</span>
+                                <span>0:30</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Right block - ElevenLabs -->
+            <div class="audio-block">
+                <div class="block-title">
+                    <i class="fas fa-microphone-alt block-icon"></i>
+                    <span>Comparativa de voz</span>
+                </div>
+                
+                <div class="elevenlabs-container">
+                    <div class="voice-comparison">
+                        <div class="comparison-title">Voz Real vs. ElevenLabs</div>
+                        
+                        <div class="voice-wave-container">
+                            <!-- Real voice -->
+                            <div class="voice-row">
+                                <div class="voice-label">Voz Real</div>
+                                <div class="voice-wave" id="real-voice">
+                                    <canvas id="real-voice-canvas" width="400" height="50"></canvas>
+                                    <div class="voice-progress" id="real-progress"></div>
+                                </div>
+                                <div class="play-button" id="play-real">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                            
+                            <!-- ElevenLabs voice -->
+                            <div class="voice-row">
+                                <div class="voice-label">ElevenLabs</div>
+                                <div class="voice-wave" id="ai-voice">
+                                    <canvas id="ai-voice-canvas" width="400" height="50"></canvas>
+                                    <div class="voice-progress" id="ai-progress"></div>
+                                </div>
+                                <div class="play-button" id="play-ai">
+                                    <i class="fas fa-play"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Sub-demo - Descript -->
+        <div class="sub-demo-container">
+            <div class="block-title">
+                <i class="fas fa-film block-icon"></i>
+                <span>Edición de video con IA - Descript</span>
+            </div>
+            
+            <div class="descript-demo">
+                <!-- Descript interface -->
+                <div class="descript-interface">
+                    <div class="descript-header">
+                        <div class="descript-logo">
+                            <i class="fas fa-edit" style="margin-right: 8px;"></i>
+                            <span>Descript</span>
+                        </div>
+                    </div>
+                    
+                    <div class="descript-content">
+                        <div class="media-timeline">
+                            <!-- Video track -->
+                            <div class="video-track">
+                                <div class="track-clip" style="left: 10%; width: 60%;"></div>
+                                <div class="progress-indicator"></div>
+                            </div>
+                            
+                            <!-- Subtitle track -->
+                            <div class="subtitle-track">
+                                <div class="subtitle-item" style="left: 10%; width: 15%;"></div>
+                                <div class="subtitle-item" style="left: 30%; width: 20%;"></div>
+                                <div class="subtitle-item" style="left: 55%; width: 15%;"></div>
+                                <div class="progress-indicator"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- TikTok export -->
+                <div class="tiktok-export">
+                    <i class="fab fa-tiktok tiktok-icon"></i>
+                    <div class="export-text">Exportación a TikTok</div>
+                    <button class="export-button">
+                        <i class="fas fa-file-export"></i>
+                        Exportar
+                    </button>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Key message -->
+        <div class="key-message">
+            IA <span class="gradient-text">democratizó</span> un estudio completo de producción
+        </div>
+    </div>
+    
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Generate Suno waveform
+            const sunoWaveBars = document.getElementById('suno-wave-bars');
+            
+            // Create random wave bars
+            for (let i = 0; i < 100; i++) {
+                const bar = document.createElement('div');
+                bar.className = 'wave-bar';
+                const height = Math.random() * 80 + 10;
+                bar.style.height = `${height}%`;
+                sunoWaveBars.appendChild(bar);
+            }
+            
+            // Draw real voice waveform
+            const realVoiceCanvas = document.getElementById('real-voice-canvas');
+            const realCtx = realVoiceCanvas.getContext('2d');
+            drawWaveform(realCtx, 400, 50, '#2bcbfb', 0.9);
+            
+            // Draw AI voice waveform
+            const aiVoiceCanvas = document.getElementById('ai-voice-canvas');
+            const aiCtx = aiVoiceCanvas.getContext('2d');
+            drawWaveform(aiCtx, 400, 50, '#fe0096', 1.0);
+            
+            // Add play functionality
+            const playReal = document.getElementById('play-real');
+            const playAi = document.getElementById('play-ai');
+            const realProgress = document.getElementById('real-progress');
+            const aiProgress = document.getElementById('ai-progress');
+            
+            playReal.addEventListener('click', function() {
+                simulatePlayback(realProgress, playReal);
+            });
+            
+            playAi.addEventListener('click', function() {
+                simulatePlayback(aiProgress, playAi);
+            });
+            
+            // Function to draw waveform
+            function drawWaveform(ctx, width, height, color, complexity) {
+                ctx.clearRect(0, 0, width, height);
+                ctx.strokeStyle = color;
+                ctx.lineWidth = 2;
+                
+                ctx.beginPath();
+                ctx.moveTo(0, height / 2);
+                
+                const segments = 100;
+                for (let i = 0; i < segments; i++) {
+                    const x = width * (i / segments);
+                    const y = height / 2 + Math.sin(i * 0.2 * complexity) * (Math.random() * 15 + 5);
+                    ctx.lineTo(x, y);
+                }
+                
+                ctx.stroke();
+            }
+            
+            // Simulate audio playback
+            function simulatePlayback(progressElement, buttonElement) {
+                // Change icon to pause
+                buttonElement.querySelector('i').className = 'fas fa-pause';
+                
+                // Reset progress
+                progressElement.style.width = '0%';
+                
+                // Animate progress
+                let progress = 0;
+                const interval = setInterval(() => {
+                    progress += 1;
+                    progressElement.style.width = `${progress}%`;
+                    
+                    if (progress >= 100) {
+                        clearInterval(interval);
+                        buttonElement.querySelector('i').className = 'fas fa-play';
+                    }
+                }, 50);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IA en el trabajo | Portada</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&family=Poppins:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            overflow: auto;
+            overflow-x: hidden;
+            background-color: #031e31;
+            color: white;
+        }
+        .slide-container {
+            width: 1280px;
+            min-height: 720px;
+            position: relative;
+            overflow: hidden;
+            overflow-x: hidden;
+        }
+        .diagonal-divider {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            clip-path: polygon(0 0, 55% 0, 45% 100%, 0 100%);
+            background: rgba(254, 0, 150, 0.1);
+            z-index: 1;
+        }
+        .robot-arm {
+            position: absolute;
+            top: 60%;
+            left: 30%;
+            transform: translate(-50%, -50%);
+            width: 40%;
+            height: 400px;
+            background-image: url('https://placeholder.com/robot-arm-pixel-art');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: drop-shadow(0 0 15px rgba(43, 203, 251, 0.6));
+            z-index: 2;
+        }
+        .human-side {
+            position: absolute;
+            top: 60%;
+            right: 20%;
+            transform: translate(0, -50%);
+            width: 40%;
+            height: 400px;
+            background-image: url('https://placeholder.com/human-bw-photo');
+            background-size: contain;
+            background-repeat: no-repeat;
+            background-position: center;
+            filter: grayscale(100%);
+            z-index: 2;
+        }
+        .title-container {
+            position: absolute;
+            top: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 90%;
+            z-index: 3;
+            text-align: center;
+        }
+        .main-title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 64px;
+            font-weight: 900;
+            margin-bottom: 20px;
+            line-height: 1.1;
+            background: linear-gradient(90deg, #fe0096, #2bcbfb);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            text-shadow: 0 0 20px rgba(254, 0, 150, 0.6);
+        }
+        .subtitle {
+            font-family: 'Poppins', sans-serif;
+            font-size: 28px;
+            font-weight: 500;
+            color: #ffffff;
+            margin-bottom: 40px;
+        }
+        .author {
+            font-family: 'Poppins', sans-serif;
+            font-size: 20px;
+            color: rgba(255, 255, 255, 0.8);
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 100%;
+            text-align: center;
+            z-index: 3;
+        }
+        .social-icon {
+            margin: 0 8px;
+            color: #2bcbfb;
+            transition: color 0.3s;
+        }
+        .social-icon:hover {
+            color: #fe0096;
+        }
+        .neon-glow {
+            position: absolute;
+            width: 300px;
+            height: 300px;
+            border-radius: 50%;
+            filter: blur(70px);
+            opacity: 0.15;
+            z-index: 0;
+        }
+        .glow-1 {
+            background-color: #fe0096;
+            top: -100px;
+            left: -100px;
+        }
+        .glow-2 {
+            background-color: #2bcbfb;
+            bottom: -100px;
+            right: -100px;
+        }
+        .pixel-code {
+            position: absolute;
+            top: 40%;
+            left: 45%;
+            transform: translate(-50%, -50%);
+            font-family: 'Courier New', monospace;
+            color: #2bcbfb;
+            z-index: 3;
+            font-size: 80px;
+            text-shadow: 0 0 10px #2bcbfb;
+            animation: float 3s ease-in-out infinite;
+        }
+        @keyframes float {
+            0%, 100% { transform: translate(-50%, -50%); }
+            50% { transform: translate(-50%, -55%); }
+        }
+        .diagonal-swipe {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 200%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(254, 0, 150, 0.3), rgba(43, 203, 251, 0.3));
+            transform: translateX(-100%);
+            z-index: 10;
+            animation: swipe 2s forwards;
+        }
+        @keyframes swipe {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); opacity: 0; }
+        }
+        .code-representation {
+            font-family: 'Courier New', monospace;
+            position: absolute;
+            left: 30%;
+            top: 60%;
+            transform: translateY(-50%);
+            color: #2bcbfb;
+            font-size: 14px;
+            text-align: left;
+            z-index: 3;
+            width: 15%;
+            background: rgba(3, 30, 49, 0.8);
+            padding: 15px;
+            border-radius: 10px;
+            border-left: 3px solid #fe0096;
+            opacity: 0.8;
+        }
+        /* Styles for navigation buttons */
+        .nav-button {
+            position: fixed;
+            top: 50%;
+            transform: translateY(-50%);
+            z-index: 1000; /* Ensure buttons are on top */
+            background-color: transparent; /* Minimalist background */
+            color: rgba(255, 255, 255, 0.7); /* Arrow color */
+            border: none; /* No border for minimalist look */
+            padding: 10px;
+            font-family: 'Courier New', monospace; /* Pixel-art feel font */
+            font-size: 48px; /* Larger arrow */
+            font-weight: bold;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: color 0.3s, transform 0.2s;
+            line-height: 1;
+        }
+
+        .nav-button:hover {
+            color: #fe0096; /* Hover effect - pink */
+            transform: translateY(-50%) scale(1.1); /* Slightly larger on hover */
+        }
+
+        .nav-button:disabled {
+            color: rgba(255, 255, 255, 0.2);
+            cursor: not-allowed;
+        }
+
+        #prevButton {
+            left: 30px; /* Position on the left */
+        }
+
+        #nextButton {
+            right: 30px; /* Position on the right */
+        }
+    </style>
+</head>
+<body>
+    <div class="slide-container">
+        <!-- Background glows -->
+        <div class="neon-glow glow-1"></div>
+        <div class="neon-glow glow-2"></div>
+        
+        <!-- Diagonal divider -->
+        <div class="diagonal-divider"></div>
+        
+        <!-- Visual elements -->
+        <div class="code-representation">
+            function createIdea() {<br>
+            &nbsp;&nbsp;const ai = new AI();<br>
+            &nbsp;&nbsp;const human = new Human();<br>
+            &nbsp;&nbsp;return ai.help(human.creativity);<br>
+            }
+        </div>
+        
+        <!-- Title and subtitle -->
+        <div class="title-container">
+            <h1 class="main-title">IA en el trabajo</h1>
+            <h1 class="main-title">Creatividad + Productividad a otro nivel</h1>
+            <p class="subtitle">Lo que antes tomaba horas, ahora toma ideas.</p>
+        </div>
+        
+        <!-- Author info -->
+        <div class="author">
+            Por: 
+            <a href="https://www.linkedin.com/in/diego-qui%C3%B1ones-montecinos-650010249/" class="social-link"><i class="fab fa-linkedin social-icon"></i>Diego Quiñones</a> | 
+            <a href="https://www.instagram.com/yeyobitz" class="social-link"><i class="fab fa-instagram social-icon"></i>@yeyobitz</a> / 
+            <a href="https://www.instagram.com/weasperoconmusica" class="social-link"><i class="fab fa-instagram social-icon"></i>@weasperoconmusica</a> | 
+            <a href="https://yeyobitz.dev" class="social-link"><i class="fas fa-globe social-icon"></i>yeyobitz.dev</a>
+        </div>
+        
+        <!-- Animation overlay -->
+        <div class="diagonal-swipe"></div>
+        
+        <!-- Robot arm and human visualization (placeholders) -->
+        <div style="position: absolute; top: 50%; left: 30%; transform: translate(-50%, -50%); z-index: 2;">
+            <div style="width: 250px; height: 300px; background: linear-gradient(45deg, #0c2842, #031e31); border-radius: 10px; display: flex; flex-direction: column; justify-content: center; align-items: center; border: 1px solid rgba(43, 203, 251, 0.3);">
+                <div style="width: 180px; height: 200px; background-color: #081828; margin-bottom: 20px; position: relative; overflow: hidden;">
+                    <!-- Pixelated robot arm representation -->
+                    <div style="position: absolute; width: 20px; height: 120px; background-color: #2bcbfb; top: 40px; left: 50px; transform: rotate(45deg);"></div>
+                    <div style="position: absolute; width: 20px; height: 70px; background-color: #2bcbfb; top: 100px; left: 90px; transform: rotate(-10deg);"></div>
+                    <div style="position: absolute; width: 40px; height: 40px; background-color: #fe0096; top: 70px; left: 120px; border-radius: 5px;"></div>
+                </div>
+                <div style="font-family: 'Courier New', monospace; color: #2bcbfb; font-size: 12px;">AI_ASSIST.v3.21</div>
+            </div>
+        </div>
+        
+        <div style="position: absolute; top: 50%; right: 30%; transform: translate(50%, -50%); z-index: 2;">
+            <div style="width: 250px; height: 300px; background: linear-gradient(45deg, #272727, #000000); border-radius: 10px; filter: grayscale(100%); display: flex; justify-content: center; align-items: center;">
+                <!-- Simplified human representation -->
+                <div style="width: 180px; height: 200px; position: relative;">
+                    <div style="width: 60px; height: 60px; background-color: #aaaaaa; border-radius: 50%; position: absolute; top: 10px; left: 60px;"></div>
+                    <div style="width: 100px; height: 120px; background-color: #777777; position: absolute; top: 80px; left: 40px; border-radius: 10px 10px 0 0;"></div>
+                    <div style="width: 40px; height: 40px; background-color: #aaaaaa; position: absolute; top: 120px; left: 140px; border-radius: 5px;"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation Buttons -->
+    <div> 
+        <button id="prevButton" class="nav-button" onclick="goToPrevSlide()">‹</button>
+        <button id="nextButton" class="nav-button" onclick="goToNextSlide()">›</button>
+    </div>
+
+    <script src="navigation.js" defer></script>
+</body>
+</html>
