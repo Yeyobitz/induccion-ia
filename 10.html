@@ -247,6 +247,8 @@
             position: relative;
             border-left: 3px solid transparent;
             transition: all 0.3s ease;
+            min-width: 0;
+            box-sizing: border-box;
         }
         .demo-step:hover {
             border-left-color: #fe0096;
@@ -280,7 +282,10 @@
             border-radius: 5px;
             color: #2bcbfb;
             margin-top: 5px;
-            display: inline-block;
+            display: block;
+            overflow-wrap: break-word;
+            max-width: 100%;
+            box-sizing: border-box;
         }
         .analogy-container {
             width: 90%;
