@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pingüino Emperador: El Rey de la Antártida</title>
+    <style>
+        /* --- Reseteo Básico y Estilos Globales --- */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f4f7f6; /* Un gris muy claro */
+        }
+
+        .container {
+            width: 90%;
+            max-width: 1100px;
+            margin: auto;
+            overflow: hidden;
+            padding: 0 20px;
+        }
+
+        h1, h2, h3 {
+            color: #003366; /* Azul oscuro */
+            margin-bottom: 0.8em;
+        }
+
+        p {
+            margin-bottom: 1em;
+        }
+
+        img {
+            max-width: 100%;
+            height: auto;
+            display: block;
+            border-radius: 8px;
+        }
+
+        /* --- Header y Hero Section --- */
+        header#hero {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('https://placehold.co/1200x600?text=Pingüinos+Emperador+en+la+Antártida');
+            background-size: cover;
+            background-position: center center;
+            color: #fff;
+            min-height: 70vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            padding: 2em 0;
+        }
+
+        header#hero h1 {
+            font-size: 3.5rem;
+            margin-bottom: 0.3em;
+            color: #fff;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.7);
+        }
+
+        header#hero p {
+            font-size: 1.5rem;
+            margin-bottom: 1.5em;
+            max-width: 700px;
+        }
+
+        .cta-button {
+            display: inline-block;
+            background-color: #ff9900; /* Naranja vibrante */
+            color: #fff;
+            padding: 12px 25px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-size: 1.1rem;
+            font-weight: bold;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            border: none;
+            cursor: pointer;
+        }
+
+        .cta-button:hover {
+            background-color: #e68a00; /* Naranja más oscuro */
+            transform: translateY(-2px);
+        }
+
+        /* --- Secciones --- */
+        section {
+            padding: 60px 0;
+            border-bottom: 1px solid #e0e0e0;
+        }
+        section:last-of-type {
+            border-bottom: none;
+        }
+        section:nth-child(even) {
+            background-color: #ffffff;
+        }
+
+        /* --- Sección Sobre --- */
+        #about .about-content {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            align-items: center;
+        }
+
+        #about .about-text {
+            flex: 1;
+            min-width: 300px;
+        }
+
+        #about .about-image {
+            flex: 1;
+            min-width: 300px;
+            text-align: center;
+        }
+         #about .about-image img {
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+
+        /* --- Sección Características --- */
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+            gap: 25px;
+        }
+
+        .feature-item {
+            background-color: #fff;
+            padding: 25px;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+            text-align: center;
+        }
+        .feature-item .icon {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            color: #00509e; /* Azul medio */
+        }
+        .feature-item h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+        }
+
+        /* --- Sección Galería --- */
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .gallery-grid img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        .gallery-grid img:hover {
+            transform: scale(1.05);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+        }
+
+        /* --- Sección Conservación --- */
+        #conservation {
+            background-color: #e6f3ff; /* Azul muy claro */
+        }
+        #conservation .cta-button {
+            margin-top: 20px;
+        }
+
+        /* --- Footer --- */
+        footer {
+            background-color: #003366; /* Azul oscuro */
+            color: #fff;
+            text-align: center;
+            padding: 30px 0;
+        }
+        footer p {
+            margin: 0;
+        }
+
+        /* --- Responsividad --- */
+        @media (max-width: 768px) {
+            header#hero h1 {
+                font-size: 2.5rem;
+            }
+            header#hero p {
+                font-size: 1.2rem;
+            }
+            #about .about-content {
+                flex-direction: column;
+            }
+            .container {
+                width: 95%;
+            }
+        }
+        @media (max-width: 480px) {
+             header#hero h1 {
+                font-size: 2rem;
+            }
+            header#hero p {
+                font-size: 1rem;
+            }
+            .cta-button {
+                padding: 10px 20px;
+                font-size: 1rem;
+            }
+             .features-grid {
+                grid-template-columns: 1fr; /* Una columna en móviles */
+            }
+        }
+
+    </style>
+</head>
+<body>
+
+    <!-- Hero Section -->
+    <header id="hero">
+        <div class="container">
+            <h1>Pingüino Emperador</h1>
+            <p>El majestuoso y resiliente monarca de la Antártida.</p>
+            <button class="cta-button" data-action="scroll-to-about">Descubre su Mundo</button>
+        </div>
+    </header>
+
+    <main>
+        <!-- Sección Sobre el Pingüino Emperador -->
+        <section id="about">
+            <div class="container">
+                <h2>Conoce al Gigante Gentil</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>El pingüino emperador (<em>Aptenodytes forsteri</em>) es el más alto y pesado de todas las especies de pingüinos vivientes. Endémico de la Antártida, es un ave admirablemente adaptada a uno de los entornos más fríos y hostiles del planeta.</p>
+                        <p>Los machos y hembras son similares en plumaje y tamaño, alcanzando hasta 122 cm de altura y pesando entre 22 y 45 kg. Su dieta se compone principalmente de peces, aunque también incluye crustáceos como el krill y cefalópodos como el calamar.</p>
+                        <p>Son famosos por sus increíbles viajes para reproducirse y por la dedicación de los machos, quienes incuban un único huevo durante el crudo invierno antártico, soportando temperaturas extremas y vientos helados sin alimentarse durante meses.</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://placehold.co/500x350?text=Pingüino+Emperador+Adulto" alt="Pingüino emperador adulto en la nieve">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Características Destacadas -->
+        <section id="features">
+            <div class="container">
+                <h2>Adaptaciones Asombrosas</h2>
+                <div class="features-grid">
+                    <div class="feature-item">
+                        <div class="icon">❄️</div>
+                        <h3>Resistencia Extrema</h3>
+                        <p>Capaces de sobrevivir a temperaturas de -60°C y vientos de hasta 200 km/h gracias a múltiples capas de plumas y grasa.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="icon">🥚</div>
+                        <h3>Crianza Única</h3>
+                        <p>El macho incuba el huevo sobre sus patas, cubriéndolo con un pliegue de piel, durante más de dos meses en pleno invierno.</p>
+                    </div>
+                    <div class="feature-item">
+                        <div class="icon">🏊</div>
+                        <h3>Buceadores Expertos</h3>
+                        <p>Pueden sumergirse a profundidades de más de 500 metros y permanecer bajo el agua hasta 20 minutos.</p>
+                    </div>
+                     <div class="feature-item">
+                        <div class="icon">👨‍👩‍👧‍👦</div>
+                        <h3>Vida Social</h3>
+                        <p>Forman grandes colonias y se agrupan para conservar el calor (huddling), rotando posiciones para que todos se beneficien.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Galería de Imágenes -->
+        <section id="gallery">
+            <div class="container">
+                <h2>Galería de Momentos</h2>
+                <div class="gallery-grid">
+                    <img src="https://placehold.co/400x300?text=Polluelo+de+Emperador" alt="Polluelo de pingüino emperador">
+                    <img src="https://placehold.co/400x300?text=Colonia+de+Pingüinos" alt="Colonia de pingüinos emperador">
+                    <img src="https://placehold.co/400x300?text=Pingüino+Buceando" alt="Pingüino emperador nadando">
+                    <img src="https://placehold.co/400x300?text=Paisaje+Antártico" alt="Pingüinos en el paisaje antártico">
+                    <img src="https://placehold.co/400x300?text=Huddling" alt="Pingüinos agrupados para el calor">
+                    <img src="https://placehold.co/400x300?text=Emperador+y+Cría" alt="Pingüino emperador con su cría">
+                </div>
+            </div>
+        </section>
+
+        <!-- Sección Conservación -->
+        <section id="conservation">
+            <div class="container">
+                <h2>Un Futuro Incierto: Conservación</h2>
+                <p>El pingüino emperador enfrenta serias amenazas debido al cambio climático. La pérdida de hielo marino, crucial para su reproducción y alimentación, pone en peligro su supervivencia. El aumento de las temperaturas también afecta la disponibilidad de sus presas.</p>
+                <p>Organizaciones de todo el mundo trabajan para estudiar y proteger a estas magníficas aves y su hábitat. Apoyar la investigación y las políticas de acción climática es fundamental para asegurar el futuro del rey de la Antártida.</p>
+                <button class="cta-button" data-action="learn-more-conservation">Aprende Más Sobre Conservación</button>
+            </div>
+        </section>
+    </main>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <p>© 2023 Planeta Pingüino. Todos los derechos reservados.</p>
+            <p>Una página dedicada al asombroso Pingüino Emperador.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Smooth scroll para el botón del hero
+            const heroButton = document.querySelector('#hero .cta-button[data-action="scroll-to-about"]');
+            if (heroButton) {
+                heroButton.addEventListener('click', function() {
+                    const aboutSection = document.getElementById('about');
+                    if (aboutSection) {
+                        aboutSection.scrollIntoView({ behavior: 'smooth' });
+                    }
+                });
+            }
+
+            // Ejemplo de acción para el botón de conservación
+            const conservationButton = document.querySelector('#conservation .cta-button[data-action="learn-more-conservation"]');
+            if (conservationButton) {
+                conservationButton.addEventListener('click', function() {
+                    alert('Gracias por tu interés en la conservación del Pingüino Emperador. ¡Visita sitios de organizaciones como WWF o National Geographic para más información!');
+                    // Podrías redirigir a una URL real aquí:
+                    // window.open('https://www.worldwildlife.org/species/emperor-penguin', '_blank');
+                });
+            }
+
+            // Pequeño efecto en todos los botones CTA al hacerles clic (además del hover CSS)
+            const allCtaButtons = document.querySelectorAll('.cta-button');
+            allCtaButtons.forEach(button => {
+                button.addEventListener('mousedown', function() {
+                    this.style.transform = 'translateY(1px)';
+                });
+                button.addEventListener('mouseup', function() {
+                    this.style.transform = 'translateY(-2px)'; // Vuelve al estado de hover
+                });
+                // Para asegurar que vuelve a su estado original si el mouse sale mientras está presionado
+                button.addEventListener('mouseleave', function() {
+                     if (this.style.transform === 'translateY(1px)') { // Solo si estaba presionado
+                        this.style.transform = 'translateY(0px)';
+                    }
+                });
+                 button.addEventListener('mouseenter', function() { // Para restaurar el hover si no estaba presionado
+                    if (this.style.transform !== 'translateY(1px)') {
+                         this.style.transform = 'translateY(-2px)';
+                    }
+                });
+            });
+
+        });
+    </script>
+
+</body>
+</html>
